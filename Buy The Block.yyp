@@ -1,0 +1,41 @@
+{
+  "$GMProject":"v1",
+  "%Name":"Buy The Block",
+  "AudioGroups":[
+    {"$GMAudioGroup":"v1","%Name":"audiogroup_default","exportDir":"","name":"audiogroup_default","resourceType":"GMAudioGroup","resourceVersion":"2.0","targets":-1,},
+  ],
+  "configs":{
+    "children":[],
+    "name":"Default",
+  },
+  "defaultScriptType":0,
+  "Folders":[],
+  "ForcedPrefabProjectReferences":[],
+  "IncludedFiles":[],
+  "isEcma":false,
+  "LibraryEmitters":[],
+  "MetaData":{
+    "IDEVersion":"2026.0.0.16",
+  },
+  "name":"Buy The Block",
+  "resources":[
+    {"id":{"name":"obj_building_parent","path":"objects/obj_building_parent/obj_building_parent.yy",},},
+    {"id":{"name":"obj_commercial","path":"objects/obj_commercial/obj_commercial.yy",},},
+    {"id":{"name":"obj_factory","path":"objects/obj_factory/obj_factory.yy",},},
+    {"id":{"name":"obj_game_manager","path":"objects/obj_game_manager/obj_game_manager.yy",},},
+    {"id":{"name":"obj_residence","path":"objects/obj_residence/obj_residence.yy",},},
+    {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"sprite_commercial","path":"sprites/sprite_commercial/sprite_commercial.yy",},},
+    {"id":{"name":"sprite_residence","path":"sprites/sprite_residence/sprite_residence.yy",},},
+    {"id":{"name":"Sprite3","path":"sprites/Sprite3/Sprite3.yy",},},
+  ],
+  "resourceType":"GMProject",
+  "resourceVersion":"2.0",
+  "RoomOrderNodes":[
+    {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+  ],
+  "templateType":"game",
+  "TextureGroups":[
+    {"$GMTextureGroup":"","%Name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","customOptions":"","directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"name":"Default","resourceType":"GMTextureGroup","resourceVersion":"2.0","targets":-1,},
+  ],
+}
