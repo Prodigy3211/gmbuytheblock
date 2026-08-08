@@ -1,3 +1,19 @@
+//apply camera screen shake
+if (shake_remain > 0){
+	var camera = view_camera[0];
+	var cam_x = camera_get_view_x(camera);
+	var cam_y = camera_get_view_y(camera);
+	
+	//Add random offset based on current shake
+	var rx = random_range(-shake_remain, shake_remain);
+	var ry = random_range(-shake_remain, shake_remain);
+	camera_set_view_pos(camera, cam_x + rx, cam_y = ry);
+	
+	//Decay the shake variables over time
+	shake_remain = max(0, shake_remain - 0.5);
+}
+
+
 //Button clicks only work when building is selected
 
 if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
@@ -31,6 +47,14 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 					global.player_cash -= inst.building_cost;
 					inst.is_owned_by_player = true;
 					inst.image_blend = inst.owned_building_color;
+					
+					//Shake effect for building purchase
+					inst.image_xscale = 1.3; //snap to 130% of size
+					inst.image_yscale = 1.3;
+					
+					//4-pixel screen sshake
+					shake_magnitude = 4
+					shake_remain = 4
 				}
 			} else {
 				//Upgrade Button

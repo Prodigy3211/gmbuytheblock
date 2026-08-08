@@ -7,6 +7,8 @@ building_level = 1;
 repair_cost = 150;
 upgrade_cost = 400;
 owned_building_color = c_green // default color
+target_scale = 1.0;
+
 
 //Set cost based on object name
 
