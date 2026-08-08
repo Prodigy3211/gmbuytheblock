@@ -10,3 +10,6 @@ alarm[0] = payout_rate;
 
 //random event every 10 seconds
 alarm[1] = 600;
+
+//Win or Lose
+game_over_state = "playing"; //can switch to win or lose

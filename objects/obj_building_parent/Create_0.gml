@@ -13,7 +13,7 @@ owned_building_color = c_green // default color
 switch(object_index){
 	case obj_residence:
 		building_cost=250;
-		income_amount=5; //5 dollars per tick
+		income_amount=25; //5 dollars per tick
 		owned_building_color = c_green;
 		break;
 	case obj_commercial:
