@@ -98,3 +98,33 @@ if (global.selected_building != noone) {
 //	draw_set_colour(c_dkgray);
 	//draw_text(ui_x1 + 20, ui_y1 + 160, "Press [esc] ti deselect");
 }
+
+//win/lose screen
+
+//check if game is over
+if(game_over_state != "playing") {
+	//Draw a full screen semi trasnparent black overlay
+	draw_set_colour(c_black);
+	draw_set_alpha(0.85);
+	draw_rectangle(0,0, display_get_gui_width(), display_get_gui_height(),false);
+	
+	//center the text
+	draw_set_alpha(1.0);
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_middle);
+	
+	var screen_cx = display_get_gui_width() / 2;
+	var screen_cy = display_get_gui_height() / 2;
+	
+	if(game_over_state == "win") {
+		draw_set_colour(c_lime);
+		draw_text(screen_cx, screen_cy - 20, "VICTORY!");
+		draw_set_colour(c_white);
+		draw_text(screen_cx, screen_cy + 20, "You successfully own this bitch!");
+	} else if (game_over_state == "lose") {
+		draw_set_colour(c_red);
+		draw_text(screen_cx, screen_cy - 20, "You SUCK!");
+		draw_set_colour(c_white);
+		draw_text(screen_cx, screen_cy + 20, "The city has frozen your assets and reclaimed your property");
+	}
+}
