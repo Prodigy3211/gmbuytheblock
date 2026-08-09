@@ -1,5 +1,6 @@
 global.player_cash = 1000;
 global.selected_building = noone; //ensures that no building is selected as default
+global.city_owned_percent = 0;
 
 
 //Payout timer (60 frames = 1 second at 60fps. 30 frames = 1secone at 30fps)
