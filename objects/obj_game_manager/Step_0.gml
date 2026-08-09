@@ -67,10 +67,11 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 				}
 			} else {
 				//Upgrade Button
-				if(global.player_cash >= inst.upgrade_cost){
+				if(inst.building_level < 5 && global.player_cash >= inst.upgrade_cost){
 					global.player_cash -= inst.upgrade_cost;
 					inst.building_level += 1;
-					inst.income_amount = ceil(inst.upgrade_cost * 1.8);
+					inst.income_amount = ceil(inst.upgrade_cost * 1.5);
+					inst.upgrade_cost = ceil(inst.upgrade_cost * 1.8);
 				
 				}
 			}
