@@ -5,7 +5,7 @@ global.city_owned_percent = 0;
 
 //Payout timer (60 frames = 1 second at 60fps. 30 frames = 1secone at 30fps)
 
-payout_rate = 60;
+payout_rate = 180;
 alarm[0] = payout_rate;
 
 
