@@ -60,9 +60,9 @@ if (global.selected_building != noone) {
 	
 	//visual Health Bar
 	var bar_x1 = ui_x1 + 20;
-	var bar_y1 = ui_y1 + 110;
+	var bar_y1 = ui_y1 + 140;
 	var bar_x2 = ui_x2 - 20;
-	var bar_y2 = ui_y2 + 125;
+	var bar_y2 = ui_y2 + 155;
 	
 	draw_set_colour(c_dkgray)
 	draw_rectangle(bar_x1, bar_y1, bar_x2, bar_y2, false); //Empty bar's background
@@ -92,21 +92,24 @@ if (global.selected_building != noone) {
 	
 	if (b_owned == false){
 	var can_buy = (global.player_cash >= global.selected_building.building_cost);
-	draw_set_colour(can_buy ? c-gray : c_dkgray);
-	}
+	draw_set_colour(can_buy ? c_gray : c_dkgray);
+	
 	
 	draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y + btn_h, false);
 	draw_set_colour(c_white);
 	draw_set_halign(fa_center);
 
-	if(b_owned == true && (is_maxed || !can_afford)) {
+	if(b_owned == true && (is_maxed || can_afford)) {
 	
 	draw_set_colour(c_dkgray);
 	
 } else {
-		draw_set_colour(c_dkgray);
+		draw_set_colour(c_gray);
 }
-	
+	}
+
+
+	// the actual rectangle shape
 	draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y + btn_h, false);
 	
 	
@@ -117,8 +120,13 @@ if (global.selected_building != noone) {
 		draw_text(btn_left_x + (btn_w/2), btn_y + 5, "BUY");
 	}else if (is_maxed) {
 		draw_set_alpha(c_yellow)
-		draw_text(btn_left_x + (btn_w/2), btn_y + 5, "MAX LEVEL")
+		draw_text(btn_left_x + (btn_w/2), btn_y + 5, "MAX LEVEL");
 	}else {
+		//Need a rectangle for upgrade button
+		draw_set_colour(c_gray);
+		draw_rectangle(btn_right_x,btn_y,btn_right_x+btn_w, btn_y + btn_h, false)
+		
+		draw_set_colour(c_white);
 		draw_text(btn_left_x + (btn_w/2), btn_y + 5, "UPGRADE ($" + string(global.selected_building.upgrade_cost)+ ")");
 	}
 	
@@ -134,7 +142,7 @@ if (global.selected_building != noone) {
 	
 	
 	//beroom
-	boon_owned == fixile
+//	boon_owned == fixile
 	
 	
 	//How to close the panel
