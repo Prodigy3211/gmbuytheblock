@@ -18,6 +18,11 @@ with (obj_building_parent) {
 	if(is_owned_by_player == true) {
 		if(building_health >= 30){ //stops generating cash if health drops below 31points
 		global.player_cash += income_amount;
+		
+		//Green Income text for each tick
+		var txt = instance_create_layer(x, y - 20, "Instances", obj_floating_text);
+		txt.text = "+$" + string(income_amount);
+		txt.text_color = c_lime; //green for profit!
 	}
 }
 

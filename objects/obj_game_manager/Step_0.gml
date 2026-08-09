@@ -48,6 +48,15 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 					inst.is_owned_by_player = true;
 					inst.image_blend = inst.owned_building_color;
 					
+					//floating Deduction test on top of Building
+					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
+					txt.text = "-$" + string(inst.building_cost);
+					txt.text_color = c_red; //Red for Spending that Cash!
+					
+					//Snap the HUD text to 150% for animation of deduction
+					hud_cash_scale = 1.5;
+					
+					
 					//Shake effect for building purchase
 					inst.image_xscale = 1.3; //snap to 130% of size
 					inst.image_yscale = 1.3;
@@ -80,3 +89,7 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 				}
 			}
 }
+
+//smoothly animate HUD back to Scale 100%
+
+hud_cash_scale = lerp(hud_cash_scale, 1.0, 0.1);

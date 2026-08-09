@@ -11,7 +11,7 @@ draw_rectangle(10,10,220,45,false);
 //Draw the cast text in green
 draw_set_alpha(1.0);
 draw_set_colour(c_lime);
-draw_text(20,18,"Cash: $" + string(global.player_cash));
+draw_text_transformed(20,18,"Cash: $" + string(global.player_cash), hud_cash_scale,hud_cash_scale, 0);
 
 
 //Draw out the Building Inspectional Panel if Building is Selected

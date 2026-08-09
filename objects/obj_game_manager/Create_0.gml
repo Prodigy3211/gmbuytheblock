@@ -17,3 +17,5 @@ game_over_state = "playing"; //can switch to win or lose
 //screen shake when building purchase
 shake_magnitude = 0;
 shake_remain = 0;
+
+hud_cash_scale = 1.0;
