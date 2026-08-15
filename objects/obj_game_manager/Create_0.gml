@@ -1,6 +1,9 @@
-global.player_cash = 1000;
+global.player_cash = 1000; // Used to buy units and buildings
+global.player_population = 0; //used to buy units
+global.player_influence = 0; //spent on policies
 global.selected_building = noone; //ensures that no building is selected as default
 global.city_owned_percent = 0;
+
 
 
 //Payout timer (60 frames = 1 second at 60fps. 30 frames = 1secone at 30fps)

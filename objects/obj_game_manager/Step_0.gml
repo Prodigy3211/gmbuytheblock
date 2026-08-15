@@ -41,6 +41,9 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 	//Click Detection: Primary Action Button (buy or upgrade building)
 	if (gui_mouse_x >= btn_left_x && gui_mouse_x <= btn_left_x + btn_w &&
 		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
+			
+			if(inst.is_player_base = true) exit;
+			
 			if (inst.is_owned_by_player == false) {
 				//Buy Logic
 				if(global.player_cash >= inst.building_cost) {
@@ -86,6 +89,7 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 		//Click Detection : Repair button
 		if(gui_mouse_x >= btn_right_x && gui_mouse_x <= btn_right_x + btn_w &&
 			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y +btn_h) {
+				
 				
 				if (inst.is_owned_by_player == true && inst.building_health < 100) {
 					if(global.player_cash >= inst.repair_cost) {

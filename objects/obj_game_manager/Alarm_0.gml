@@ -3,7 +3,7 @@
 with (obj_building_parent) {
 	//Handle steady building health decay
 	//slow health decay over time
-	if(is_owned_by_player == true){
+	if(is_owned_by_player == true && is_player_base == false){
 		if (building_health > 0){
 			building_health -= 1;
 		} else {
@@ -15,18 +15,24 @@ with (obj_building_parent) {
 
 
 	//Handle income based on building payouts ADD: New logic for Upgrades
-	if(is_owned_by_player == true) {
-		if(building_health >= 30){ //stops generating cash if health drops below 31points
+	if(is_owned_by_player == true && building_health >= 30) {
+		//stops generating cash if health drops below 31points
 			
 			var dynamic_income = income_amount * building_level;
 			global.player_cash += dynamic_income;
+			
+			var dynamic_population = population_generation * building_level;
+			global.player_population += dynamic_population;
+			
+			var dynamic_influence = influence_generation * building_level;
+			global.player_influence += dynamic_influence;
+			
 		
 		//Green Income text for each tick
 			var txt = instance_create_layer(x, y - 20, "Instances", obj_floating_text);
 			txt.text = "+$" + string(income_amount);
 			txt.text_color = c_lime; //green for profit!
 	}
-}
 
 }
 
