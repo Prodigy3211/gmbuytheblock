@@ -41,6 +41,9 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 	//Click Detection: Primary Action Button (buy or upgrade building)
 	if (gui_mouse_x >= btn_left_x && gui_mouse_x <= btn_left_x + btn_w &&
 		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
+			
+			if(inst.is_player_base = true) exit;
+			
 			if (inst.is_owned_by_player == false) {
 				//Buy Logic
 				if(global.player_cash >= inst.building_cost) {
@@ -87,6 +90,7 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 		if(gui_mouse_x >= btn_right_x && gui_mouse_x <= btn_right_x + btn_w &&
 			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y +btn_h) {
 				
+				
 				if (inst.is_owned_by_player == true && inst.building_health < 100) {
 					if(global.player_cash >= inst.repair_cost) {
 						global.player_cash -= inst.repair_cost;
@@ -99,3 +103,32 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 //smoothly animate HUD back to Scale 100%
 
 hud_cash_scale = lerp(hud_cash_scale, 1.0, 0.1);
+
+
+// Keyboard Map navigation
+
+//Input keys
+var move_left = keyboard_check(vk_left) || keyboard_check(ord("A"));
+var move_right = keyboard_check(vk_right) || keyboard_check(ord("D"));
+var move_up = keyboard_check(vk_up) || keyboard_check(ord("W"));
+var move_down = keyboard_check(vk_down) || keyboard_check(ord("S"));
+
+// Change Camera target position based on which keys are held
+if (move_left) global.cam_x -= cam_speed;
+if (move_right) global.cam_x += cam_speed;
+if (move_up) global.cam_y -= cam_speed;
+if (move_down) global.cam_y += cam_speed;
+
+// Get the Screen size
+//var view_w = camera_get_view_width(view_camera);
+//var view_h = camera_get_view_height(view_camera);
+
+// Apply Boundary
+// Clamp (variable, minumum_allowed, max allowed)
+
+global.cam_x = clamp(global.cam_x, 0, room_width - 1366);
+global.cam_y = clamp(global.cam_y, 0, room_height - 768);
+
+//Update the games active lens position with the clamp coordinates
+
+camera_set_view_pos(view_camera[0], global.cam_x, global.cam_y)
