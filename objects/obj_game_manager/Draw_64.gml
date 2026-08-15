@@ -6,16 +6,25 @@ draw_set_valign(fa_top);
 
 draw_set_colour(c_black);
 draw_alpha= 0.5;
-draw_rectangle(10,10,220,75,false); //Background big enough to have cash and progress bar
+draw_rectangle(10,10,280,130,false); //Background big enough to have cash and progress bar
 
 //Draw the cast text in green
 draw_set_alpha(1.0);
 draw_set_colour(c_lime);
 draw_text_transformed(20,18,"Cash: $" + string(global.player_cash), hud_cash_scale,hud_cash_scale, 0);
 
+//Draw the Population Tracker
+draw_set_colour(c_orange);
+draw_text(20, 44, "Population: " + string(global.player_population));
+
+//Influence Tracker
+draw_set_colour(c_purple);
+draw_text(20,70, "Influence: " + string(global.player_influence));
+
+
 // City Buyout Percentage Text
 draw_set_colour(c_white);
-draw_text(20, 48, "City Buyout: " + string(global.city_owned_percent) + "%");
+draw_text(20, 96, "City Buyout: " + string(global.city_owned_percent) + "%");
 
 
 //Draw out the Building Inspectional Panel if Building is Selected
