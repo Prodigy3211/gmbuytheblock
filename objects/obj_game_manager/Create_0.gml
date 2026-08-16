@@ -1,5 +1,6 @@
 global.player_cash = 1000; // Used to buy units and buildings
-global.player_population = 0; //used to buy units
+global.player_population_max= 5; //Max Population
+global.player_population = 0; //Total Population
 global.player_influence = 0; //spent on policies
 global.selected_building = noone; //ensures that no building is selected as default
 global.city_owned_percent = 0;

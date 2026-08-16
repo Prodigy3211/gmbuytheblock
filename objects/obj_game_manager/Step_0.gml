@@ -42,7 +42,25 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 	if (gui_mouse_x >= btn_left_x && gui_mouse_x <= btn_left_x + btn_w &&
 		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
 			
-			if(inst.is_player_base = true) exit;
+			if(inst.is_player_base = true) {
+				//Check for Population Capacity before user can buy Recruiters at the home base
+				if (global.player_cash >= inst.recruiter_cost && global.player_population < global.player_population_max) {
+					
+					global.player_cash -= inst.recruiter_cost;
+					inst.recruiter_count += 1;
+					
+					//Add to current population
+					global.player_population += 1;
+					inst.recruiter_cost = ceil(inst.recruiter_cost * 1.4);
+					
+					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
+					txt.text = "-$" +string(inst.recruiter_cost);
+					txt.text_color= c_red;
+				} else if (global.player_population >= global.player_population_max){
+					show_debug_message("Population Cap REACH! Buy Residences to grow.");
+				}
+				exit;
+			}
 			
 			if (inst.is_owned_by_player == false) {
 				//Buy Logic
