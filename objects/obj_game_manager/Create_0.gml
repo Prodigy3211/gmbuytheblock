@@ -4,6 +4,10 @@ global.player_population = 0; //Total Population
 global.player_influence = 0; //spent on policies
 global.selected_building = noone; //ensures that no building is selected as default
 global.city_owned_percent = 0;
+global.district_uptown_unlocked = false;
+global.district_uptown_unlock_cost = 50 // costs 50 influence to unlock Uptown
+global.district_eastside_unlocked = false;
+global.district_eastside_unlock_cost = 300;
 
 
 

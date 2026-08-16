@@ -13,6 +13,7 @@ target_scale = 1.0;
 is_hovered = false;
 image_blend = c_dkgrey;
 is_player_base = false;
+building_district = "Downtown";
 
 
 //Set cost based on object name

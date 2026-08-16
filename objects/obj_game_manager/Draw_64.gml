@@ -29,7 +29,17 @@ draw_text(20, 96, "City Buyout: " + string(global.city_owned_percent) + "%");
 
 //Draw out the Building Inspectional Panel if Building is Selected
 
-if (global.selected_building != noone) {
+
+
+//dynamic sector lock we are nexting the old buy repair stuff inside of a new check for districts
+
+
+ 
+ 
+ 
+ 
+ 
+ if (global.selected_building != noone) {
 	
 	
 	
@@ -40,6 +50,7 @@ if (global.selected_building != noone) {
 	var can_afford = (global.player_cash >= global.selected_building.upgrade_cost);
 	var is_maxed = (global.selected_building.building_level >= 5);
 	var is_base = global.selected_building.is_player_base;
+	var inst = global.selected_building;
 	
 	//Set Box Dimension for Menu
 	var ui_x1 = display_get_gui_width() - 320;
@@ -112,6 +123,28 @@ if (global.selected_building != noone) {
 	
 	draw_set_halign(fa_center);
 	
+	//We are next the buy buttons inside of a new Sector Unlock section
+	
+	if(inst.building_district == "Uptown" && global.district_uptown_unlocked == false){
+	//Check if you can afford with Influence
+	var can_afford_unlock = (global.player_influence >= global.district_uptown_unlock_cost);
+	
+	//Draw the unlock box
+	draw_set_colour(can_afford_unlock ? c_gray : c_dkgray);
+	draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y +btn_h, false);
+	
+	//Draw the label for Unlock
+	draw_set_colour(c_white);
+	draw_set_halign(fa_center);
+	draw_text(btn_left_x + (btn_w/ 2), btn_y + 5, "UNLOCK");
+	
+	//Print the cost notification in purple on the side
+	draw_set_colour(c_purple);
+	draw_set_halign(fa_left);
+	draw_text(ui_x1 + 20, ui_y1 + 110, "Requires: " + string(global.district_uptown_unlock_cost) + " Influence");
+	
+	
+	} else {
 	//Button A (Buy or Upgrade) Left Button Slot 'Buy, Hire,Max Leve, Upgrade'	
 	
 	if (b_owned == false){
@@ -157,18 +190,20 @@ if (global.selected_building != noone) {
 
 //RIGHT BUTTON SLOT
 
-if (b_owned == true) {
-	var can_repair = (global.player_cash >= global.selected_building.repair_cost && b_health < 100);
-	draw_set_colour(can_repair ? c_gray : c_dkgray);
-	draw_rectangle(btn_right_x, btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
+	if (b_owned == true) {
+		var can_repair = (global.player_cash >= global.selected_building.repair_cost && b_health < 100);
+		draw_set_colour(can_repair ? c_gray : c_dkgray);
+		draw_rectangle(btn_right_x, btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
 	
-	draw_set_colour(c_white);
-	draw_text(btn_right_x + (btn_w / 2), btn_y + 6, "REPAIR ($" + string(global.selected_building.repair_cost) + ")");
+		draw_set_colour(c_white);
+		draw_text(btn_right_x + (btn_w / 2), btn_y + 6, "REPAIR ($" + string(global.selected_building.repair_cost) + ")");
 	
-}
+	}
 
-draw_set_halign(fa_left) // reset alignment for other UI elements
-draw_set_alpha(1.0); //reset alpha transparency
+		draw_set_halign(fa_left) // reset alignment for other UI elements
+		draw_set_alpha(1.0); //reset alpha transparency
+
+	}
 
 }
 	

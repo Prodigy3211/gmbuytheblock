@@ -42,6 +42,21 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 	if (gui_mouse_x >= btn_left_x && gui_mouse_x <= btn_left_x + btn_w &&
 		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
 			
+			//Sector Influence transaction here
+			if (inst.building_district == "Uptown" && global.district_uptown_unlocked == false) {
+				if(global.player_influence >= global.district_uptown_unlock_cost){
+				//Deduct influence points
+				global.player_influence -= global.district_uptown_unlock_cost;
+				global.district_uptown_unlocked = true;
+				
+				//Trigger a visual confirmation popup over the building
+				var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
+				txt.text = "District Unlocked!";
+				txt.text_color = c_lime;
+			}
+			exit;
+		}	
+			
 			if(inst.is_player_base = true) {
 				//Check for Population Capacity before user can buy Recruiters at the home base
 				if (global.player_cash >= inst.recruiter_cost && global.player_population < global.player_population_max) {
