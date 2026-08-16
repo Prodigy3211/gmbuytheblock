@@ -4,10 +4,21 @@ global.player_population = 0; //Total Population
 global.player_influence = 0; //spent on policies
 global.selected_building = noone; //ensures that no building is selected as default
 global.city_owned_percent = 0;
-global.district_uptown_unlocked = false;
-global.district_uptown_unlock_cost = 50 // costs 50 influence to unlock Uptown
-global.district_eastside_unlocked = false;
-global.district_eastside_unlock_cost = 300;
+
+
+
+//Master Struct of All City Districts
+global.districts = {
+	"West Side": { unlocked: true, cost: 0},
+	"Downtown": { unlocked: false, cost: 175},
+	"East Side": { unlocked: false, cost: 300},
+	"Uptown": { unlocked: false, cost: 1000},
+	"Capital Hill": { unlocked: false, cost: 2000},
+};
+//global.district_uptown_unlocked = false;
+//global.district_uptown_unlock_cost = 50 // costs 50 influence to unlock Uptown
+//global.district_eastside_unlocked = false;
+//global.district_eastside_unlock_cost = 300;
 
 
 

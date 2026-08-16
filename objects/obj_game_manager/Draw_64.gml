@@ -51,6 +51,9 @@ draw_text(20, 96, "City Buyout: " + string(global.city_owned_percent) + "%");
 	var is_maxed = (global.selected_building.building_level >= 5);
 	var is_base = global.selected_building.is_player_base;
 	var inst = global.selected_building;
+	var district_data = variable_struct_get(global.districts, inst.building_district);
+	var is_unlocked = district_data.unlocked;
+	var unlock_cost = district_data.cost;
 	
 	//Set Box Dimension for Menu
 	var ui_x1 = display_get_gui_width() - 320;
@@ -125,9 +128,9 @@ draw_text(20, 96, "City Buyout: " + string(global.city_owned_percent) + "%");
 	
 	//We are next the buy buttons inside of a new Sector Unlock section
 	
-	if(inst.building_district == "Uptown" && global.district_uptown_unlocked == false){
+	if(is_unlocked == false){
 	//Check if you can afford with Influence
-	var can_afford_unlock = (global.player_influence >= global.district_uptown_unlock_cost);
+	var can_afford_unlock = (global.player_influence >= unlock_cost);
 	
 	//Draw the unlock box
 	draw_set_colour(can_afford_unlock ? c_gray : c_dkgray);
@@ -141,7 +144,7 @@ draw_text(20, 96, "City Buyout: " + string(global.city_owned_percent) + "%");
 	//Print the cost notification in purple on the side
 	draw_set_colour(c_purple);
 	draw_set_halign(fa_left);
-	draw_text(ui_x1 + 20, ui_y1 + 110, "Requires: " + string(global.district_uptown_unlock_cost) + " Influence");
+	draw_text(ui_x1 + 20, ui_y1 + 110, inst.building_district + " Zone: " + string(unlock_cost) + " Influence");
 	
 	
 	} else {

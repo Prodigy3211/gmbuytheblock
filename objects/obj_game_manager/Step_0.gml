@@ -37,24 +37,26 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 	
 	//Pointer to selected target variables
 	var inst = global.selected_building;
+	var district_data = variable_struct_get(global.districts, inst.building_district);
 	
 	//Click Detection: Primary Action Button (buy or upgrade building)
 	if (gui_mouse_x >= btn_left_x && gui_mouse_x <= btn_left_x + btn_w &&
 		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
-			
+			show_debug_message("Button Click Detected")
 			//Sector Influence transaction here
-			if (inst.building_district == "Uptown" && global.district_uptown_unlocked == false) {
-				if(global.player_influence >= global.district_uptown_unlock_cost){
+			if (district_data.unlocked == false) {
+				if(global.player_influence >= district_data.cost){
 				//Deduct influence points
-				global.player_influence -= global.district_uptown_unlock_cost;
-				global.district_uptown_unlocked = true;
+				global.player_influence -= district_data.cost;
+				district_data.unlocked = true;
 				
 				//Trigger a visual confirmation popup over the building
 				var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
-				txt.text = "District Unlocked!";
+				txt.text = inst.building_district + "Unlocked!";
 				txt.text_color = c_lime;
 			}
 			exit;
+				
 		}	
 			
 			if(inst.is_player_base = true) {

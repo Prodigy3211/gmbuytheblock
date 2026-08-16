@@ -1,1 +1,1 @@
-building_district = "EastSide"
+building_district = "East Side";
