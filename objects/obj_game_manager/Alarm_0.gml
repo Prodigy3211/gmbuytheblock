@@ -15,9 +15,22 @@ with (obj_building_parent) {
 	if(is_owned_by_player == true && is_player_base == false){
 		if (building_health > 0){
 			building_health -= 1;
-		} else {
-			building_health = 0;
-	}
+		}
+		
+		//Emminent Domain! The City will take their buildings back from you.
+		if (building_health <= 0) {
+			is_owned_by_player = false;
+			building_health = 100;
+			image_blend = c_dkgray;
+			building_level= 1;
+			
+			//Alert popup for lost property
+			var txt = instance_create_layer(x,y - 20, "Instances", obj_floating_text);
+			txt.text = "CITY HAS RECLAIMED ASSET!";
+			txt.text_color = c_red;
+		}
+		
+	
 }
 
 // Penalty for Health Loss (I'm thinking the city can take it permanently.

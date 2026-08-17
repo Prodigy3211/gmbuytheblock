@@ -65,6 +65,7 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	var is_unlocked = district_data.unlocked;
 	var unlock_cost = district_data.cost;
 	
+	
 	//Set Box Dimension for Menu
 	var ui_x1 = display_get_gui_width() - 320;
 	var ui_y1 = display_get_gui_height() - 260;
