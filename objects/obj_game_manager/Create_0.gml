@@ -4,6 +4,9 @@ global.player_population = 0; //Total Population
 global.player_influence = 0; //spent on policies
 global.selected_building = noone; //ensures that no building is selected as default
 global.city_owned_percent = 0;
+global.net_cash_tick = 0;
+global.net_influence_tick = 0;
+
 
 
 
@@ -64,3 +67,10 @@ display_set_gui_size(window_get_width(),window_get_height());
 global.cam_x = 0;
 global.cam_y = 0;
 cam_speed = 10;
+
+
+//Enemy Threat Level!
+
+global.enemy_threat = 0;
+global.threat_check_rate = 600; //Checks for a Rai every 10 seconds
+alarm[2] = global.threat_check_rate; //Alarm 2 is now our enemy Director

@@ -42,7 +42,7 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 	//Click Detection: Primary Action Button (buy or upgrade building)
 	if (gui_mouse_x >= btn_left_x && gui_mouse_x <= btn_left_x + btn_w &&
 		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
-			show_debug_message("Button Click Detected")
+			
 			//Sector Influence transaction here
 			if (district_data.unlocked == false) {
 				if(global.player_influence >= district_data.cost){

@@ -1,0 +1,33 @@
+// Roll a dice against the Active threat Meter to determine raids
+
+if (random(100) <= global.enemy_threat) {
+	//Scan the map and create a list of valid player-owned targets
+	var sabotage_targets = ds_list_create();
+	
+	with(obj_building_parent) {
+		//only Target Normal Player Buildings (Home Base is safe from smaller raids
+		if(is_owned_by_player == true && is_player_base == false) {
+			ds_list_add(sabotage_targets, id);
+		}
+	}
+	
+	//Raid if the player owns at least one property
+	if(ds_list_size(sabotage_targets) > 0) {
+		var victim = ds_list_find_value(sabotage_targets, irandom(ds_list_size(sabotage_targets)- 1));
+		
+		//Damage the Target's building health down to 15%
+		victim.building_health = 15;
+		
+		//reduce Threat level after a successful attack
+		global.enemy_threat = max(0, global.enemy_threat - 30);
+		
+		//Spawn a flashing alert pop up on top of Node
+		var txt = instance_create_layer(victim.x, victim.y - 30, "Instances", obj_floating_text);
+		txt.text= "ENEMY SABOTAGE!";
+		txt.text_color = c_red;
+	}
+	//clear data stucture list
+	ds_list_destroy(sabotage_targets);
+}
+
+alarm[2] = global.threat_check_rate;

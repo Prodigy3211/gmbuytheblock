@@ -6,12 +6,13 @@ draw_set_valign(fa_top);
 
 draw_set_colour(c_black);
 draw_alpha= 0.5;
-draw_rectangle(10,10,280,130,false); //Background big enough to have cash and progress bar
+draw_rectangle(10,10,320,130,false); //Background big enough to have cash and progress bar
 
-//Draw the cast text in green
+//Draw the cash text in green
 draw_set_alpha(1.0);
 draw_set_colour(c_lime);
-draw_text_transformed(20,18,"Cash: $" + string(global.player_cash), hud_cash_scale,hud_cash_scale, 0);
+var cash_str = "Cash: $" +string(global.player_cash) + " (+$" + string(global.net_cash_tick) + "/t)";
+draw_text_transformed(20,18,cash_str, hud_cash_scale,hud_cash_scale, 0);
 
 //Draw the Population Tracker
 draw_set_colour(c_orange);
@@ -19,7 +20,8 @@ draw_text(20, 44, "Population: " + string(global.player_population) + " / " +str
 
 //Influence Tracker
 draw_set_colour(c_purple);
-draw_text(20,70, "Influence: " + string(global.player_influence));
+var inf_str = "Influence: " + string(global.player_influence) + " (+" + string(global.net_influence_tick) + "/t)";
+draw_text(20,70,inf_str);
 
 
 // City Buyout Percentage Text
@@ -27,17 +29,25 @@ draw_set_colour(c_white);
 draw_text(20, 96, "City Buyout: " + string(global.city_owned_percent) + "%");
 
 
+//Enemy Threat Meter
+draw_set_colour(c_dkgray);
+draw_rectangle(20, 125, 200, 135, false) //empty background for a gauge
+
+//color shift from yellow to red
+var threat_color = make_colour_rgb((global.enemy_threat / 100) * 255, 50, 50);
+draw_set_colour(threat_color);
+
+//Fill section of the bar graph
+var bar_fill_x = 20 + ((200 - 20) * (global.enemy_threat /100));
+draw_rectangle(20, 125, bar_fill_x, 135, false);
+
+//Show numerical percentage
+draw_set_colour(c_white);
+draw_set_halign(fa_left);
+draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "%");
+
+
 //Draw out the Building Inspectional Panel if Building is Selected
-
-
-
-//dynamic sector lock we are nexting the old buy repair stuff inside of a new check for districts
-
-
- 
- 
- 
- 
  
  if (global.selected_building != noone) {
 	
