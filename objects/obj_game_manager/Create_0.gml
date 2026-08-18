@@ -6,6 +6,8 @@ global.selected_building = noone; //ensures that no building is selected as defa
 global.city_owned_percent = 0;
 global.net_cash_tick = 0;
 global.net_influence_tick = 0;
+global.garrison_units= 0; //Starting defenders
+
 
 
 

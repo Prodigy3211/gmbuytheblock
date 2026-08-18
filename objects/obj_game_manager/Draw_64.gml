@@ -57,7 +57,9 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	var b_health = global.selected_building.building_health;
 	var b_cost = global.selected_building.building_cost;
 	var b_owned = global.selected_building.is_owned_by_player;
-	var can_afford = (global.player_cash >= global.selected_building.upgrade_cost);
+	var can_afford_repair = (global.player_cash >= global.selected_building.repair_cost);
+	var can_repair = (global.player_cash >= global.selected_building.repair_cost && b_health < 100);
+	var can_upgrade = (global.player_cash >= global.selected_building.upgrade_cost);
 	var is_maxed = (global.selected_building.building_level >= 5);
 	var is_base = global.selected_building.is_player_base;
 	var inst = global.selected_building;
@@ -106,7 +108,7 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	var bar_x1 = ui_x1 + 20;
 	var bar_y1 = ui_y1 + 155;
 	var bar_x2 = ui_x2 - 20;
-	var bar_y2 = ui_y2 + 170;
+	var bar_y2 = ui_y1 + 170;
 	
 	draw_set_colour(c_dkgray)
 	draw_rectangle(bar_x1, bar_y1, bar_x2, bar_y2, false); //Empty bar's background
@@ -173,7 +175,7 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	}
 
 	else if(is_base == true) {
-	// HIRE BUTTON
+	// HIRE Recruiter BUTTON
 	var can_hire = (global.player_cash >= global.selected_building.recruiter_cost);
 	draw_set_colour(can_hire ? c_gray : c_dkgray);
 	draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y + btn_h, false);
@@ -181,6 +183,8 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	draw_set_colour(c_white);
 	var cost_str = string(global.selected_building.recruiter_cost);
 	draw_text(btn_left_x + (btn_w / 2), btn_y + 6, "HIRE ($" + cost_str + ")");
+	
+	
 	
 } 
 	else if (is_maxed == true){
@@ -193,7 +197,7 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 }
 	else{
 		//NORMAL OWNED BUILDING UPGRADE BUTTON
-		var can_upgrade = (global.player_cash >= global.selected_building.upgrade_cost);
+		
 		draw_set_colour(can_upgrade ? c_gray : c_dkgray);
 		draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y + btn_h, false);
 		
@@ -204,22 +208,54 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 
 //RIGHT BUTTON SLOT
 
-	if (b_owned == true) {
-		var can_repair = (global.player_cash >= global.selected_building.repair_cost && b_health < 100);
-		draw_set_colour(can_repair ? c_gray : c_dkgray);
-		draw_rectangle(btn_right_x, btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
-	
+	if(b_owned == true) {
+		//Adding in Right button to hire defenders
 		draw_set_colour(c_white);
-		draw_text(btn_right_x + (btn_w / 2), btn_y + 6, "REPAIR ($" + string(global.selected_building.repair_cost) + ")");
+		draw_set_halign(fa_center);
+		
+		if (is_base == true) {	
+				if(inst.building_health < 100) {
+			//If Damaged then the we show a Repair button
+				draw_set_color(can_repair ? c_red : c_dkgray);
+				draw_rectangle(btn_right_x, btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
+		
+				draw_set_color(c_white);
+				draw_text(btn_right_x + (btn_w/2), btn_y +5, "REPAIR ($" + string(inst.repair_cost) + ")");
+	
+		} else {
+		//If Healthy the homebase can recruite defenders
+				var can_afford_defence = (global.player_cash >= 300);
+				var is_cap_maxed = (global.player_population >= global.player_population_max);
+		
+				draw_set_colour((!can_afford_defence || is_cap_maxed) ? c_dkgray : c_gray);
+				draw_rectangle(btn_right_x,btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
+		
+				draw_set_colour(c_white);
+				draw_text(btn_right_x + (btn_w/2), btn_y + 5, "DEFENDER ($300)");
+		}
+	
+		//Faction Army Count
+			draw_set_color(c_orange);
+			draw_set_halign(fa_left);
+			draw_text(ui_x1 + 20, ui_y1 + 135, "Defenders: " +string(global.garrison_units));
+			
+		} else {
+			var normal_can_repair =(can_afford_repair && b_health < 100);
+			draw_set_colour(can_repair ? c_gray : c_dkgray);
+			draw_rectangle(btn_right_x, btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
+	
+			draw_set_colour(c_white);
+			draw_text(btn_right_x + (btn_w / 2), btn_y + 6, "REPAIR ($" + string(global.selected_building.repair_cost) + ")");
+		}
 	
 	}
 
 		draw_set_halign(fa_left) // reset alignment for other UI elements
 		draw_set_alpha(1.0); //reset alpha transparency
-
 	}
+ }
+	
 
-}
 	
 	//beroom
 //	boon_owned == fixile

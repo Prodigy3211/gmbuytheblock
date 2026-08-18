@@ -14,9 +14,46 @@ if (shake_remain > 0){
 }
 
 
+//smoothly animate HUD back to Scale 100%
+
+hud_cash_scale = lerp(hud_cash_scale, 1.0, 0.1);
+
+
+// Keyboard Map navigation
+
+//Input keys
+var move_left = keyboard_check(vk_left) || keyboard_check(ord("A"));
+var move_right = keyboard_check(vk_right) || keyboard_check(ord("D"));
+var move_up = keyboard_check(vk_up) || keyboard_check(ord("W"));
+var move_down = keyboard_check(vk_down) || keyboard_check(ord("S"));
+
+// Change Camera target position based on which keys are held
+if (move_left) global.cam_x -= cam_speed;
+if (move_right) global.cam_x += cam_speed;
+if (move_up) global.cam_y -= cam_speed;
+if (move_down) global.cam_y += cam_speed;
+
+// Get the Screen size
+//var view_w = camera_get_view_width(view_camera);
+//var view_h = camera_get_view_height(view_camera);
+
+// Apply Boundary
+// Clamp (variable, minumum_allowed, max allowed)
+
+global.cam_x = clamp(global.cam_x, 0, room_width - 1366);
+global.cam_y = clamp(global.cam_y, 0, room_height - 768);
+
+//Update the games active lens position with the clamp coordinates
+
+camera_set_view_pos(view_camera[0], global.cam_x, global.cam_y)
+
+
 //Button clicks only work when building is selected
 
-if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
+if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
+	
+	exit;
+}
 	
 	//UI Layout
 	
@@ -59,7 +96,7 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 				
 		}	
 			
-			if(inst.is_player_base = true) {
+			if(inst.is_player_base == true) {
 				//Check for Population Capacity before user can buy Recruiters at the home base
 				if (global.player_cash >= inst.recruiter_cost && global.player_population < global.player_population_max) {
 					
@@ -125,6 +162,37 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 		if(gui_mouse_x >= btn_right_x && gui_mouse_x <= btn_right_x + btn_w &&
 			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y +btn_h) {
 				
+				if(inst.is_player_base == true) {
+					if (inst.building_health < 100){
+					//Base repair / hire defender
+					//If base is damaged then you must repair before you can hire a defender
+					if (global.player_cash >= inst.repair_cost){
+						global.player_cash -= inst.repair_cost;
+						inst.building_health = 100; //Bring HQ to full health
+						
+						var txt = instance_create_layer(inst.x, inst.y -20, "Instances", obj_floating_text);
+						txt.text = "-$" + string(inst.repair_cost) + " Repair";
+						txt.text_color = c_red;
+					}
+				} else {
+					//Base is at 100% health so now you can recruite defenders
+					var defender_cash_cost = 300; //If you change this value you must change it in Draw GUI as well
+					if(global.player_cash >= defender_cash_cost && global.player_population < global.player_population_max) {
+						global.player_cash -= defender_cash_cost;
+						global.garrison_units += 1;
+						global.player_population += 1;
+						
+						var txt = instance_create_layer(inst.x, inst.y -20, "Instances", obj_floating_text);
+						txt.text = "-$300 Def";
+						txt.text_color = c_red;
+					} else if (global.player_population >= global.player_population_max) {
+						show_debug_message("Population Cap Reached! Cannot recruit any more defenders");
+					}
+				}
+			
+				exit; // Prevent the button from processing repairs and defenders at the same time
+				
+		} else {
 				
 				if (inst.is_owned_by_player == true && inst.building_health < 100) {
 					if(global.player_cash >= inst.repair_cost) {
@@ -132,38 +200,9 @@ if(global.selected_building != noone && mouse_check_button_pressed(mb_left)) {
 						inst.building_health = 100; //restore to full
 					}
 				}
+				exit;
 			}
-}
-
-//smoothly animate HUD back to Scale 100%
-
-hud_cash_scale = lerp(hud_cash_scale, 1.0, 0.1);
+			}
 
 
-// Keyboard Map navigation
 
-//Input keys
-var move_left = keyboard_check(vk_left) || keyboard_check(ord("A"));
-var move_right = keyboard_check(vk_right) || keyboard_check(ord("D"));
-var move_up = keyboard_check(vk_up) || keyboard_check(ord("W"));
-var move_down = keyboard_check(vk_down) || keyboard_check(ord("S"));
-
-// Change Camera target position based on which keys are held
-if (move_left) global.cam_x -= cam_speed;
-if (move_right) global.cam_x += cam_speed;
-if (move_up) global.cam_y -= cam_speed;
-if (move_down) global.cam_y += cam_speed;
-
-// Get the Screen size
-//var view_w = camera_get_view_width(view_camera);
-//var view_h = camera_get_view_height(view_camera);
-
-// Apply Boundary
-// Clamp (variable, minumum_allowed, max allowed)
-
-global.cam_x = clamp(global.cam_x, 0, room_width - 1366);
-global.cam_y = clamp(global.cam_y, 0, room_height - 768);
-
-//Update the games active lens position with the clamp coordinates
-
-camera_set_view_pos(view_camera[0], global.cam_x, global.cam_y)
