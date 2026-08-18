@@ -76,3 +76,7 @@ cam_speed = 10;
 global.enemy_threat = 0;
 global.threat_check_rate = 600; //Checks for a Raid every 10 seconds
 alarm[2] = global.threat_check_rate; //Alarm 2 is now our enemy Director
+
+//instructions
+
+show_instructions = true; //When game starts display

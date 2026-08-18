@@ -72,6 +72,28 @@ with (obj_building_parent) {
 	}
 
 }
+
+
+// Homebase Game Loss Trigger
+with(obj_player_base) {
+	
+	//If sabotage or natural disaster destroys base it will flip to city owned
+	if(building_health <= 0){
+		is_owned_by_player = false;
+		building_health = 100;
+		image_blend = c_dkgray;
+		
+		//Trigger Faction Defeat
+		obj_game_manager.game_over_state = "lose";
+		
+		//Major flashing alert
+		var txt = instance_create_layer(x, y -20, "Instances", obj_floating_text);
+		txt.text = "HEADQUARTER DESTROYED";
+		txt.text_color = c_red;
+	}
+}
+
+
 //Adds new population max to total globally
 global.player_population_max = base_cap + total_cap_bonus;
 
@@ -113,7 +135,7 @@ if(total_buildings > 0) {
 //Evaluate Game ending States
 if (owned_count == total_buildings && total_buildings > 0) {
 	game_over_state = "win";
-} else if (global.player_cash < 0) {
+} else if (global.city_owned_percent == 0) {
 	game_over_state = "lose";
 }
 

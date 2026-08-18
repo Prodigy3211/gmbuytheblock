@@ -6,7 +6,7 @@ var final_threat_chance = max(0, global.enemy_threat - defense_mitigation);
 
 // Roll a dice against the Active threat Meter to determine raids
 
-if (random(100) <= global.enemy_threat) {
+if (random(100) <= final_threat_chance) {
 	//Scan the map and create a list of valid player-owned targets
 	var sabotage_targets = ds_list_create();
 	
@@ -34,9 +34,12 @@ if (random(100) <= global.enemy_threat) {
 	}
 	//clear data stucture list
 	ds_list_destroy(sabotage_targets);
-} else if (global.enemy_threat > 0) {
+} else {
+	
+	if(global.enemy_threat > 0 && random(100) > final_threat_chance && global.garrison_units > 0) {
 	show_debug_message("Defenders have intercepted an enemy raid!");
 }
 
+}
 
-alarm[2] = global.threat_check_rate;
+alarm[2] = global.threat_check_rate;  

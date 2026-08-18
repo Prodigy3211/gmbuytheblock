@@ -14,6 +14,7 @@ is_hovered = false;
 image_blend = c_dkgrey;
 is_player_base = false;
 building_district = "West Side";
+alert_bob_timer = 0; //Animate Floating exclamation mark icon
 
 
 //Set cost based on object name

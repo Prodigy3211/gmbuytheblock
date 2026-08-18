@@ -11,7 +11,7 @@ draw_rectangle(10,10,320,130,false); //Background big enough to have cash and pr
 //Draw the cash text in green
 draw_set_alpha(1.0);
 draw_set_colour(c_lime);
-var cash_str = "Cash: $" +string(global.player_cash) + " (+$" + string(global.net_cash_tick) + "/t)";
+var cash_str = "Cash: $" +string(global.player_cash) + " (+$" + string(global.net_cash_tick) + ")";
 draw_text_transformed(20,18,cash_str, hud_cash_scale,hud_cash_scale, 0);
 
 //Draw the Population Tracker
@@ -20,7 +20,7 @@ draw_text(20, 44, "Population: " + string(global.player_population) + " / " +str
 
 //Influence Tracker
 draw_set_colour(c_purple);
-var inf_str = "Influence: " + string(global.player_influence) + " (+" + string(global.net_influence_tick) + "/t)";
+var inf_str = "Influence: " + string(global.player_influence) + " (+" + string(global.net_influence_tick) + ")";
 draw_text(20,70,inf_str);
 
 
@@ -101,7 +101,7 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	
 	if (is_base == true) {
 		draw_set_colour(c_orange);
-		draw_text(ui_x1 + 20, ui_y1 + 130, "Recruiters: " + string(global.selected_building.recruiter_count));
+		draw_text(ui_x1 + 20, ui_y1 + 120, "Recruiters: " + string(global.selected_building.recruiter_count));
 	}
 	
 	//visual Health Bar
@@ -182,7 +182,7 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	
 	draw_set_colour(c_white);
 	var cost_str = string(global.selected_building.recruiter_cost);
-	draw_text(btn_left_x + (btn_w / 2), btn_y + 6, "HIRE ($" + cost_str + ")");
+	draw_text(btn_left_x + (btn_w / 2), btn_y + 6, "Recruiter ($" + cost_str + ")");
 	
 	
 	
@@ -290,7 +290,7 @@ if(game_over_state != "playing") {
 		draw_text(screen_cx, screen_cy + 20, "You successfully own this bitch!");
 	} else if (game_over_state == "lose") {
 		draw_set_colour(c_red);
-		draw_text(screen_cx, screen_cy - 20, "You SUCK!");
+		draw_text(screen_cx, screen_cy - 20, "You lost our Headquarters!? You SUCK!");
 		draw_set_colour(c_white);
 		draw_text(screen_cx, screen_cy + 20, "The city has frozen your assets and reclaimed your property");
 	}
