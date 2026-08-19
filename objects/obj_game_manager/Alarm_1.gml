@@ -23,9 +23,13 @@ if (random(100) <= 30) {
 		var random_target = ds_list_find_value(player_buildings, random_index);
 	
 	
-		//deal 40 points of damage to target building. OUCH!
-		random_target.building_health -= 40;
-		show_debug_message("Disaster has struck your building, health dropped");
+		//deal 60 points of damage to target building. OUCH!
+		random_target.building_health -= 60;
+		audio_play_sound(snd_loss, 15, false);
+		
+		var txt = instance_create_layer(random_target.x, random_target.y - 30, "Instances", obj_floating_text);
+		txt.text= "ACT OF GOD!";
+		txt.text_color = c_red;
 	}
 	//Destroy the data structure to prevent memory leaks
 	ds_list_destroy(player_buildings);

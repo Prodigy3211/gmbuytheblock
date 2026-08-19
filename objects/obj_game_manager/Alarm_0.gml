@@ -31,6 +31,8 @@ with (obj_building_parent) {
 			image_blend = c_dkgray;
 			building_level= 1;
 			
+			//NEED TO ADD A SOUND HERE
+			
 			//Alert popup for lost property
 			var txt = instance_create_layer(x,y - 20, "Instances", obj_floating_text);
 			txt.text = "CITY HAS RECLAIMED ASSET!";
@@ -92,6 +94,7 @@ with(obj_player_base) {
 		
 		//Trigger Faction Defeat
 		obj_game_manager.game_over_state = "lose";
+		audio_play_sound(snd_loss, 90, false);
 		
 		//Major flashing alert
 		var txt = instance_create_layer(x, y -20, "Instances", obj_floating_text);
@@ -142,6 +145,7 @@ if(total_buildings > 0) {
 //Evaluate Game ending States
 if (owned_count == total_buildings && total_buildings > 0) {
 	game_over_state = "win";
+	audio_play_sound(snd_win, 90, false);
 } else if (global.city_owned_percent == 0) {
 	game_over_state = "lose";
 }

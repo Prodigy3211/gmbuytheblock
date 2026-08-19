@@ -99,6 +99,8 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 				global.player_influence -= district_data.cost;
 				district_data.unlocked = true;
 				
+				audio_play_sound(snd_unlock, 15, false);
+				
 				//Trigger a visual confirmation popup over the building
 				var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
 				txt.text = inst.building_district + "Unlocked!";
@@ -118,6 +120,8 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 					//Add to current population
 					global.player_population += 1;
 					inst.recruiter_cost = ceil(inst.recruiter_cost * 1.4);
+					
+					audio_play_sound(snd_recruit, 15, false);
 					
 					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
 					txt.text = "-$" +string(inst.recruiter_cost);
@@ -174,6 +178,8 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 					inst.income_amount += 20;
 					inst.upgrade_cost = inst.upgrade_cost * 2;
 					
+					audio_play_sound(snd_upgrade, 15, false);
+					
 					var current_base_x = variable_instance_exists(inst,"base_width_scale") ? inst.base_width_scale : inst.image_xscale;
 					var current_base_y = variable_instance_exists( inst, "base_height_scale") ? inst.base_height_scale : inst.image_yscale;
 					
@@ -203,6 +209,8 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 						global.player_cash -= inst.repair_cost;
 						inst.building_health = 100; //Bring HQ to full health
 						
+						audio_play_sound(snd_unlock, 15, false);
+						
 						var txt = instance_create_layer(inst.x, inst.y -20, "Instances", obj_floating_text);
 						txt.text = "-$" + string(inst.repair_cost) + " Repair";
 						txt.text_color = c_red;
@@ -214,6 +222,8 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 						global.player_cash -= defender_cash_cost;
 						global.garrison_units += 1;
 						global.player_population += 1;
+						
+						audio_play_sound(snd_defender,15,false);
 						
 						var txt = instance_create_layer(inst.x, inst.y -20, "Instances", obj_floating_text);
 						txt.text = "-$300 Def";
@@ -231,6 +241,7 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 					if(global.player_cash >= inst.repair_cost) {
 						global.player_cash -= inst.repair_cost;
 						inst.building_health = 100; //restore to full
+						audio_play_sound(snd_unlock, 15, false);
 					}
 				}
 				exit;

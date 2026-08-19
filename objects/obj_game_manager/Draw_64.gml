@@ -331,11 +331,11 @@ if(game_over_state != "playing") {
 		draw_set_colour(c_lime);
 		draw_text(screen_cx, screen_cy - 20, "VICTORY!");
 		draw_set_colour(c_white);
-		draw_text(screen_cx, screen_cy + 20, "You successfully own this bitch!");
+		draw_text(screen_cx, screen_cy + 20, "You successfully own this bitch! Press 'R' to restart.");
 	} else if (game_over_state == "lose") {
 		draw_set_colour(c_red);
 		draw_text(screen_cx, screen_cy - 20, "You lost our Headquarters!? You SUCK!");
 		draw_set_colour(c_white);
-		draw_text(screen_cx, screen_cy + 20, "The city has frozen your assets and reclaimed your property");
+		draw_text(screen_cx, screen_cy + 20, "The city has frozen your assets and reclaimed your property. Press 'R' to Try again.");
 	}
 }
