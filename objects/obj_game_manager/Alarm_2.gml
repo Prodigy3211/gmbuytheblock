@@ -35,6 +35,9 @@ if (random(100) <= final_threat_chance) {
 		//reduce Threat level after a successful attack
 		global.enemy_threat = max(0, global.enemy_threat - 30);
 		
+		//Sabotage Success sound effect
+		audio_play_sound(snd_disaster, 12 , false);
+		
 		//Spawn a flashing alert pop up on top of Node
 		var txt = instance_create_layer(victim.x, victim.y - 30, "Instances", obj_floating_text);
 		txt.text= "ENEMY SABOTAGE!";

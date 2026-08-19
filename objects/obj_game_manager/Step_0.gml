@@ -133,6 +133,11 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 				if(global.player_cash >= inst.building_cost) {
 					global.player_cash -= inst.building_cost;
 					inst.is_owned_by_player = true;
+					
+					//Sound effect for buying
+					audio_play_sound(snd_buy, 10, false);
+					
+					
 					var current_base_x = variable_instance_exists(inst,"base_width_scale") ? inst.base_width_scale : inst.image_xscale;
 					var current_base_y = variable_instance_exists( inst, "base_height_scale") ? inst.base_height_scale : inst.image_yscale;
 					

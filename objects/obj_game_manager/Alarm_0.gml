@@ -153,6 +153,11 @@ if (game_over_state == "playing") {
 	global.enemy_threat = min(100, global.enemy_threat); // Cap at 100% max
 }
 
+
+if (total_building_cash > 0) {
+	audio_play_sound(snd_income, 1, false);
+}
+
 //reset the alarm to loop forever
 
 alarm[0]= payout_rate;
