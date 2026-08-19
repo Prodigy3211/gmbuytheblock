@@ -55,12 +55,12 @@ cam_speed = 8;
 //display_set_gui_size(1366, 768);
 
 //Lens settings to fix resolution
-view_enabled = true;
-view_visible[0] = true;
+//view_enabled = true;
+//view_visible[0] = true;
 
 //Standard Camera Build
-var view_cam = camera_create_view(0, 0, 1366, 768, 0, noone, -1, -1, -1, -1);
-view_set_camera(0, view_cam);
+//var view_cam = camera_create_view(0, 0, 1366, 768, 0, noone, -1, -1, -1, -1);
+//view_set_camera(0, view_cam);
 
 //GUI Match layer size with Viewport
 display_set_gui_size(window_get_width(),window_get_height());

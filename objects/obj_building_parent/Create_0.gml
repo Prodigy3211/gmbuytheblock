@@ -1,3 +1,10 @@
+//Building size consistency
+base_width_scale = image_xscale;
+base_height_scale = image_yscale;
+
+target_scale_x = base_width_scale;
+target_scale_y = base_height_scale;
+
 //Default owned by city
 is_owned_by_player = false;
 building_cost = 5000;

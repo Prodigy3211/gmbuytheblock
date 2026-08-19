@@ -1,3 +1,10 @@
+// Instructions check
+if(show_instructions = true){
+	//resets clock until player leaves instructions screen
+alarm[0] = payout_rate; 
+exit;
+}
+
 //Track Population cap
 var base_cap = 5; //Base population cap due to Home Base
 var total_cap_bonus= 0; //To allow buildings to increase the max population

@@ -1,3 +1,11 @@
+// Instructions check
+if(show_instructions = true){
+	//resets clock until player leaves instructions screen
+alarm[2] = global.threat_check_rate;
+exit;
+}
+
+
 //Defender units reduce the enemy's attack successes
 var defense_mitigation = (global.garrison_units * 15);
 //Government must overcome this defense

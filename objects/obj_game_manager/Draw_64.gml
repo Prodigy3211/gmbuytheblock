@@ -1,3 +1,47 @@
+//Instructions card
+if(show_instructions == true) {
+	
+	var scr_w = display_get_gui_width();
+	var scr_h = display_get_gui_height();
+	var cx = scr_w / 2;
+	var cy = scr_h / 2;
+	
+	// Full Screen backdrop panel
+	draw_set_colour(c_black);
+	draw_set_alpha(0.9);
+	draw_rectangle(0,0, scr_w , scr_h, false);
+	
+	//text alignment
+	draw_set_alpha(1.0);
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_middle);
+	
+	//Header
+	draw_set_color(c_yellow);
+	draw_text_transformed(cx, cy - 120, "How To Buy The Block!", 1.5, 1.5, 0);
+	
+	//Row Item Instructions
+	draw_set_colour(c_white);
+	draw_text(cx, cy - 60, "- Use WASD or Arrow Keys to navigate and pan across the city map.");
+	draw_text(cx, cy - 30,"- Left-Click buildings to BUY them. Once bought you can UPGRADE them to generate more cash.");
+	draw_text(cx, cy, "- watch your building's health! Use the REPAIR button to return your house to full health");
+	draw_text(cx, cy + 30,"- If a building's health drops to 0% the Government will take it back and you'll have to buy it again");
+	draw_text(cx, cy + 60,"- Buy Recruiters and Expand your POPULATION Cap to get more influence and unlock new districts");
+	draw_text(cx, cy + 90,"Hire base Defenders to make it harder for the government to sabotage your buildings!");
+	
+	//Footer
+	draw_set_color(c_lime)
+	draw_text(cx, cy +160, "[ Left-Click anywhere to start the game ]")
+	
+	//Resert layout anchors
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+	
+	exit;
+}
+
+
+
 //text alignment and size
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);

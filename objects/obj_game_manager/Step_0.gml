@@ -1,3 +1,15 @@
+//Start up Instructions!
+if (show_instructions == true) {
+	//If player clicks the mouse, dismiss the guide
+	if(mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_space)) { 
+			show_instructions = false;
+		}
+		
+		//freeze all background operations so game doesn't start early
+		exit;
+}
+
+
 //apply camera screen shake
 if (shake_remain > 0){
 	var camera = view_camera[0];
@@ -121,6 +133,9 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 				if(global.player_cash >= inst.building_cost) {
 					global.player_cash -= inst.building_cost;
 					inst.is_owned_by_player = true;
+					var current_base_x = variable_instance_exists(inst,"base_width_scale") ? inst.base_width_scale : inst.image_xscale;
+					var current_base_y = variable_instance_exists( inst, "base_height_scale") ? inst.base_height_scale : inst.image_yscale;
+					
 					inst.image_blend = inst.owned_building_color;
 					
 					//floating Deduction test on top of Building
@@ -133,12 +148,17 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 					
 					
 					//Shake effect for building purchase
-					inst.image_xscale = 1.3; //snap to 130% of size
-					inst.image_yscale = 1.3;
+					inst.target_scale_x = inst.base_width_scale * 1.3; //snap to 130% of size
+					inst.target_scale_y= inst.base_height_scale * 1.3;
 					
 					//4-pixel screen sshake
 					shake_magnitude = 4
 					shake_remain = 4
+					
+					inst.target_scale_x = current_base_x * 1.3;
+					inst.target_scale_y = current_base_y * 1.3;
+					inst.image_xscale = current_base_x *1.3;
+					inst.image_yscale = current_base_y * 1.3;
 				}
 			} else {
 				//Upgrade Button
@@ -148,6 +168,14 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 					
 					inst.income_amount += 20;
 					inst.upgrade_cost = inst.upgrade_cost * 2;
+					
+					var current_base_x = variable_instance_exists(inst,"base_width_scale") ? inst.base_width_scale : inst.image_xscale;
+					var current_base_y = variable_instance_exists( inst, "base_height_scale") ? inst.base_height_scale : inst.image_yscale;
+					
+					inst.target_scale_x = current_base_x * 1.3;
+					inst.target_scale_y = current_base_y * 1.3;
+					inst.image_xscale = current_base_x *1.3;
+					inst.image_yscale = current_base_y * 1.3;
 					
 					//Made the player get money too fast
 					//inst.income_amount = ceil(inst.upgrade_cost * 1.5);
