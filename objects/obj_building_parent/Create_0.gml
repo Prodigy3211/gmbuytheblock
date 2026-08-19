@@ -1,8 +1,15 @@
+//Building size consistency
+base_width_scale = image_xscale;
+base_height_scale = image_yscale;
+
+target_scale_x = base_width_scale;
+target_scale_y = base_height_scale;
+
 //Default owned by city
 is_owned_by_player = false;
 building_cost = 5000;
 income_amount = 0;
-population_generation = 0;
+population_cap_bonus = 0;
 influence_generation = 0;
 building_health= 100;
 building_level = 1;
@@ -13,6 +20,8 @@ target_scale = 1.0;
 is_hovered = false;
 image_blend = c_dkgrey;
 is_player_base = false;
+building_district = "West Side";
+alert_bob_timer = 0; //Animate Floating exclamation mark icon
 
 
 //Set cost based on object name
@@ -25,23 +34,26 @@ switch(object_index){
 		building_level = 1;
 		owned_building_color = c_silver
 		income_amount = 2;
-		influence_generation = 1;
-		population_generation = 1;
+		
+		recruiter_count = 0; //Recruiter Unit can be bought at Player Base
+		recruiter_cost = 250;
 		break;
 	case obj_residence:
 		building_cost=250;
 		income_amount= 5; //5 dollars per tick
-		population_generation = 2;
+		population_cap_bonus = 3; // Increases Population Cap by X
 		owned_building_color = c_lime;
 		break;
 	case obj_commercial:
 		building_cost=1500;
 		income_amount= 50; //45 dollars per tick
+		influence_generation = 2;
 		owned_building_color = c_aqua;
 		break;
 	case obj_factory:
 		building_cost=5000;
 		income_amount= 350; //350 dollars per tick
+		influence_generation = 8;
 		owned_building_color = c_orange;
 		break;
 	case obj_temple:
@@ -50,6 +62,6 @@ switch(object_index){
 		owned_building_color = c_green;
 		income_amount = 1000; // Need to update this to a percentage of the population
 		//to simulate a 10% tithe.
-		influence_generation = 10;
+		influence_generation = 15;
 		break;
 }

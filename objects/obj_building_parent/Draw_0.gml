@@ -23,6 +23,35 @@ if(is_hovered == true) {
 }
 
 
+//Sabotage Distress Indicator
+//Only display icon if pplayer owns it and building damaged enough to stop providing resources'
+if (is_owned_by_player == true && building_health <= 30) {
+	
+	//gentle floating bounce calculation.. will be a sine wave
+	var bob_offset = sin(alert_bob_timer) * 6;
+	
+	//place the icon above the building sprite
+	var sprite_center_offset = (sprite_get_width(sprite_index) / 2 ) - sprite_get_xoffset(sprite_index);
+	var icon_x = x + (sprite_center_offset * image_xscale) ;
+	var icon_y = (y - ((sprite_height * image_yscale) / 2)) - 25 + bob_offset;
+	
+	//Bold High contract red ! indicator
+	draw_set_colour(c_red);
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_middle);
+	
+	//draw the actual Symbol text
+	draw_text_transformed(icon_x, icon_y, "!", 1.5, 1.5, 0);
+	
+	//Draw a small border behind the ! icon
+	draw_circle(icon_x, icon_y + 2, 14, true);
+	
+	//reset alignment to standard layout
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+}
+
+
 
 
 

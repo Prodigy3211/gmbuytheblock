@@ -1,5 +1,12 @@
+// Instructions check
+if(show_instructions = true){
+	//resets clock until player leaves instructions screen
+alarm[1] = 1500
+exit;
+}
+
 //30% chance of a random event trigger
-if (random(100) <=30) {
+if (random(100) <= 30) {
 	//create an empty list to hold valid player owned buildings to target
 	var player_buildings = ds_list_create();
 	
