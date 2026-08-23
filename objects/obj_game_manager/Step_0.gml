@@ -77,11 +77,12 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 	var gui_mouse_y = device_mouse_y_to_gui(0);
 	
 	//Boxes bound to buttons
-	var btn_w = 130;
-	var btn_h =30;
+	var btn_w = 85; //Narrower buttons to fit new button slot
+	var btn_h = 30;
 	
-	var btn_left_x = ui_x1 + 20;
-	var btn_right_x = ui_x1 + 170;
+	var btn_left_x = ui_x1 + 15;
+	var btn_center_x = ui_x1 + 115; //New Repair slot in the center
+	var btn_right_x = ui_x1 + 215;
 	var btn_y = ui_y1 + 150;
 	
 	//Pointer to selected target variables
