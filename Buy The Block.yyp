@@ -32,6 +32,8 @@
     {"$GMIncludedFile":"","%Name":"snd_upgrade.wav","CopyToMask":-1,"filePath":"datafiles/audio","name":"snd_upgrade.wav","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"snd_win.m4a","CopyToMask":-1,"filePath":"datafiles/audio","name":"snd_win.m4a","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"snd_win.wav","CopyToMask":-1,"filePath":"datafiles/audio","name":"snd_win.wav","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"buytheblockpromo2.jpg","CopyToMask":-1,"filePath":"datafiles/images","name":"buytheblockpromo2.jpg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
+    {"$GMIncludedFile":"","%Name":"buytheblockpromoimage.jpg","CopyToMask":-1,"filePath":"datafiles/images","name":"buytheblockpromoimage.jpg","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
     {"$GMIncludedFile":"","%Name":"snd_buy.m4a","CopyToMask":-1,"filePath":"datafiles","name":"snd_buy.m4a","resourceType":"GMIncludedFile","resourceVersion":"2.0",},
   ],
   "isEcma":false,
