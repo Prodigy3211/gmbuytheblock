@@ -1,10 +1,12 @@
+var scr_w = display_get_gui_width();
+var scr_h = display_get_gui_height();
+var cx = scr_w / 2;
+var cy = scr_h / 2;
+
 //Instructions card
 if(show_instructions == true) {
 	
-	var scr_w = display_get_gui_width();
-	var scr_h = display_get_gui_height();
-	var cx = scr_w / 2;
-	var cy = scr_h / 2;
+	
 	
 	// Full Screen backdrop panel
 	draw_set_colour(c_black);
@@ -41,6 +43,7 @@ if(show_instructions == true) {
 }
 
 
+//RESOURCE TRACKING CARD
 
 //text alignment and size
 draw_set_halign(fa_left);
@@ -98,23 +101,30 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	
 	
 	//create shortcuts for selected building's data
+	
 	var b_health = global.selected_building.building_health;
 	var b_cost = global.selected_building.building_cost;
 	var b_owned = global.selected_building.is_owned_by_player;
+	
 	var can_afford_repair = (global.player_cash >= global.selected_building.repair_cost);
 	var can_repair = (global.player_cash >= global.selected_building.repair_cost && b_health < 100);
 	var can_upgrade = (global.player_cash >= global.selected_building.upgrade_cost);
+	
 	var is_maxed = (global.selected_building.building_level >= 5);
 	var is_base = global.selected_building.is_player_base;
 	var inst = global.selected_building;
+	
 	var district_data = variable_struct_get(global.districts, inst.building_district);
 	var is_unlocked = district_data.unlocked;
 	var unlock_cost = district_data.cost;
 	
+	var recruiter_data = global.faction_units.recruiter;
+	var defender_data = global.faction_units.defender;
+	
 	
 	//Set Box Dimension for Menu
 	var ui_x1 = display_get_gui_width() - 320;
-	var ui_y1 = display_get_gui_height() - 260;
+	var ui_y1 = display_get_gui_height() - 220;
 	var ui_x2 = display_get_gui_width() - 20;
 	var ui_y2 = display_get_gui_height() - 20;
 	
@@ -130,29 +140,34 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	
 	// Status text based on ownership
 	var owner_text = b_owned ? "Owned By You" : "Owned by City";
-	draw_text(ui_x1 + 20, ui_y1 + 20, "Status: " + owner_text);
-	draw_text(ui_x1 + 20, ui_y1 + 50, "Price: $" +string(b_cost));
-	draw_text(ui_x1 + 20, ui_y1 + 80, "Condition: " +string(ceil(b_health)) +" %");
+	draw_text(ui_x1 + 20, ui_y1 + 18, "Status: " + owner_text);
+	draw_text(ui_x1 + 20, ui_y1 + 40, "Price: $" +string(b_cost));
+	draw_text(ui_x1 + 20, ui_y1 + 62, "Condition: " +string(ceil(b_health)) +" %");
 	
 	//Upgrade
 	
 	//Upgrade Level
 	if(b_owned == true) {
 		draw_set_colour(c_yellow);//The goal is to make this stand out
-		draw_text(ui_x1 + 20, ui_y1 + 95, "Current Level: Tier " + string(global.selected_building.building_level));
-		draw_set_colour(c_white); //reset text to write
+		draw_text(ui_x1 + 20, ui_y1 + 84, "Current Level: Tier " + string(global.selected_building.building_level));
+		draw_set_colour(c_white); //reset text to white
 	}
 	
 	if (is_base == true) {
 		draw_set_colour(c_orange);
-		draw_text(ui_x1 + 20, ui_y1 + 120, "Recruiters: " + string(global.selected_building.recruiter_count));
+		draw_text(ui_x1 + 20, ui_y1 + 106, "Recruiters: " + string(global.selected_building.recruiter_count));
+		
+		//Faction Army count
+		draw_set_color(c_orange);
+		draw_set_halign(fa_left);
+		draw_text(ui_x1 + 160, ui_y1 + 106, "Defenders: " + string(global.garrison_units));
 	}
 	
-	//visual Health Bar
+	//visual Health Bar (shifted up to avoid blocking buttons)
 	var bar_x1 = ui_x1 + 20;
-	var bar_y1 = ui_y1 + 155;
+	var bar_y1 = ui_y1 + 132;
 	var bar_x2 = ui_x2 - 20;
-	var bar_y2 = ui_y1 + 170;
+	var bar_y2 = ui_y1 + 144;
 	
 	draw_set_colour(c_dkgray)
 	draw_rectangle(bar_x1, bar_y1, bar_x2, bar_y2, false); //Empty bar's background
@@ -175,11 +190,21 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	//}
 	
 	//Render Action Buttons (repair/ Upgrade)
-	var btn_w = 130;
-	var btn_h = 30;
-	var btn_left_x = ui_x1 + 20;
-	var btn_right_x = ui_x1 + 170;
-	var btn_y = ui_y1 + 195;
+	var btn_w = 85;
+	var btn_h = 24;
+	var btn_left_x = ui_x1 + 15;
+	var btn_center_x = ui_x1 + 115;
+	var btn_right_x = ui_x1 + 215;
+	var btn_y = ui_y1 + 158;
+	
+	//Wide button layout
+	var b_wide_w = 130;
+	var b_wide_right_x = ui_x1 + 170;
+	
+	//Dynamic assignments to handle wide buttons or not
+	
+	var current_btn_w = is_base ? btn_w : b_wide_w;
+	var current_right_x = is_base ? btn_right_x : b_wide_right_x;
 	
 	draw_set_halign(fa_center);
 	
@@ -191,12 +216,12 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	
 	//Draw the unlock box
 	draw_set_colour(can_afford_unlock ? c_gray : c_dkgray);
-	draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y +btn_h, false);
+	draw_rectangle(btn_left_x, btn_y, btn_left_x + current_btn_w, btn_y +btn_h, false);
 	
 	//Draw the label for Unlock
 	draw_set_colour(c_white);
 	draw_set_halign(fa_center);
-	draw_text(btn_left_x + (btn_w/ 2), btn_y + 5, "UNLOCK");
+	draw_text(btn_left_x + (current_btn_w/ 2), btn_y + 5, "UNLOCK");
 	
 	//Print the cost notification in purple on the side
 	draw_set_colour(c_purple);
@@ -213,20 +238,20 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 		draw_set_colour(can_buy ? c_gray : c_dkgray);
 	
 	
-		draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y + btn_h, false);
+		draw_rectangle(btn_left_x, btn_y, btn_left_x + current_btn_w, btn_y + btn_h, false);
 		draw_set_colour(c_white);
-		draw_text(btn_left_x + (btn_w / 2), btn_y + 6, "BUY");
+		draw_text(btn_left_x + (current_btn_w / 2), btn_y + 6, "BUY");
 	}
 
 	else if(is_base == true) {
 	// HIRE Recruiter BUTTON
 	var can_hire = (global.player_cash >= global.selected_building.recruiter_cost);
 	draw_set_colour(can_hire ? c_gray : c_dkgray);
-	draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y + btn_h, false);
+	draw_rectangle(btn_left_x, btn_y, btn_left_x + current_btn_w, btn_y + btn_h, false);
 	
 	draw_set_colour(c_white);
-	var cost_str = string(global.selected_building.recruiter_cost);
-	draw_text(btn_left_x + (btn_w / 2), btn_y + 6, "Recruiter ($" + cost_str + ")");
+	draw_set_halign(fa_center);
+	draw_text(btn_left_x + (current_btn_w / 2), btn_y + 6, "RECRUITER");
 	
 	
 	
@@ -234,20 +259,33 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	else if (is_maxed == true){
 		// Max LEVEL INDICATOR
 		draw_set_colour(c_dkgray);
-		draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y + btn_h, false);
+		draw_rectangle(btn_left_x, btn_y, btn_left_x + current_btn_w, btn_y + btn_h, false);
 		
 		draw_set_colour(c_yellow);
-		draw_text(btn_left_x + (btn_w / 2), btn_y +6, "MAX LEVEL");
+		draw_text(btn_left_x + (current_btn_w / 2), btn_y +6, "MAX LEVEL");
 }
 	else{
 		//NORMAL OWNED BUILDING UPGRADE BUTTON
 		
 		draw_set_colour(can_upgrade ? c_gray : c_dkgray);
-		draw_rectangle(btn_left_x, btn_y, btn_left_x + btn_w, btn_y + btn_h, false);
+		draw_rectangle(btn_left_x, btn_y, btn_left_x + current_btn_w, btn_y + btn_h, false);
 		
 		draw_set_colour(c_white);
-		draw_text(btn_left_x + (btn_w / 2), btn_y + 6, "UPGRADE ($" + string (global.selected_building.upgrade_cost) + ")");
+		draw_text(btn_left_x + (current_btn_w / 2), btn_y + 6, "UPGRADE");
 	}
+	
+	
+//CENTER BUTTON SLOT FOR PLAYER BASE ONLY
+	if(b_owned == true && is_base == true) {
+		draw_set_color(can_repair ? c_gray : c_dkgray);
+		if(b_health < 100 && can_afford_repair) draw_set_colour(c_olive);
+		
+		draw_rectangle(btn_center_x, btn_y, btn_center_x + current_btn_w, btn_y + btn_h, false);
+		
+		draw_set_colour(c_white);
+		draw_set_halign(fa_center);
+		draw_text(btn_center_x + (current_btn_w / 2), btn_y + 6, "REPAIR");
+	}	
 
 
 //RIGHT BUTTON SLOT
@@ -257,42 +295,59 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 		draw_set_colour(c_white);
 		draw_set_halign(fa_center);
 		
-		if (is_base == true) {	
-				if(inst.building_health < 100) {
-			//If Damaged then the we show a Repair button
-				draw_set_color(can_repair ? c_red : c_dkgray);
-				draw_rectangle(btn_right_x, btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
-		
-				draw_set_color(c_white);
-				draw_text(btn_right_x + (btn_w/2), btn_y +5, "REPAIR ($" + string(inst.repair_cost) + ")");
-	
-		} else {
-		//If Healthy the homebase can recruite defenders
-				var can_afford_defence = (global.player_cash >= 300);
-				var is_cap_maxed = (global.player_population >= global.player_population_max);
-		
-				draw_set_colour((!can_afford_defence || is_cap_maxed) ? c_dkgray : c_gray);
-				draw_rectangle(btn_right_x,btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
-		
-				draw_set_colour(c_white);
-				draw_text(btn_right_x + (btn_w/2), btn_y + 5, "DEFENDER ($300)");
-		}
-	
-		//Faction Army Count
-			draw_set_color(c_orange);
-			draw_set_halign(fa_left);
-			draw_text(ui_x1 + 20, ui_y1 + 135, "Defenders: " +string(global.garrison_units));
+		if (is_base == true) {
 			
-		} else {
-			var normal_can_repair =(can_afford_repair && b_health < 100);
-			draw_set_colour(can_repair ? c_gray : c_dkgray);
-			draw_rectangle(btn_right_x, btn_y, btn_right_x + btn_w, btn_y + btn_h, false);
-	
+			//Homebase is only place to buy defenders
+			var can_afford_defence = (global.player_cash >= 300);
+			var is_cap_maxed = (global.player_population >= global.player_population_max);
+			
+			draw_set_colour((!can_afford_defence || is_cap_maxed) ? c_dkgray : c_gray);
+			draw_rectangle(current_right_x, btn_y, current_right_x + current_btn_w, btn_y + btn_h, false);
+			
 			draw_set_colour(c_white);
-			draw_text(btn_right_x + (btn_w / 2), btn_y + 6, "REPAIR ($" + string(global.selected_building.repair_cost) + ")");
-		}
+			draw_text(current_right_x + (current_btn_w / 2), btn_y + 6, "DEFENDER");
+	
+		} else {
+			// Normal buildings safely map the Repair layout to the wide-right layout block
+				draw_set_colour(can_repair ? c_gray : c_dkgray);
+				if (b_health < 100 && can_afford_repair) draw_set_colour(c_olive);
+				
+				draw_rectangle(current_right_x, btn_y, current_right_x + current_btn_w, btn_y + btn_h, false);
+				
+				draw_set_colour(c_white);
+				draw_text(current_right_x + (current_btn_w / 2), btn_y + 6, "REPAIR");
+			
+				}
 	
 	}
+	
+	//BUTTON PRICES LABLES
+		if(b_owned == true) {
+			draw_set_colour(c_silver); // Color for Price tags
+			draw_set_halign(fa_center);
+			
+			var label_y = btn_y + btn_h + 3; //Should appear below the buttons
+			
+			if(is_base == true) {
+				//For player base we need 3 columns
+				var recruiter_cost = string(global.selected_building.recruiter_cost);
+				var repair_cost = string(global.selected_building.repair_cost);
+				
+				draw_text(btn_left_x + (current_btn_w / 2), label_y, "$" + recruiter_cost);
+				draw_text(btn_center_x + (current_btn_w / 2), label_y, "$" + repair_cost);
+				draw_text(current_right_x + (current_btn_w / 2), label_y, "$300");
+			} else {
+				//Standard Building button columns
+				var upgrade_cost = string(global.selected_building.upgrade_cost);
+				var repair_cost = string(global.selected_building.repair_cost);
+				
+				if(!is_maxed) draw_text(btn_left_x + (current_btn_w / 2), label_y, "$" + upgrade_cost);
+				draw_text(current_right_x + (current_btn_w / 2), label_y, "$" + repair_cost);
+				
+				
+			}
+			
+		}
 
 		draw_set_halign(fa_left) // reset alignment for other UI elements
 		draw_set_alpha(1.0); //reset alpha transparency
