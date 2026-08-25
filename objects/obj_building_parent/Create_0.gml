@@ -32,11 +32,32 @@ switch(object_index){
 		is_owned_by_player = true;
 		building_cost = 0;
 		building_level = 1;
-		owned_building_color = c_silver
+		owned_building_color = c_silver;
 		income_amount = 2;
 		
 		recruiter_count = 0; //Recruiter Unit can be bought at Player Base
 		recruiter_cost = 250;
+			building_actions = [
+				new scr_UIButton("RECRUITER",
+					function(_inst) { purchase_faction_unit("recruiter", _inst);},
+					function(_inst) { return _inst.recruiter_cost; },
+					function(_inst) { return (global.player_cash >= _inst.recruiter_cost); }
+				),
+				new scr_UIButton("REPAIR",
+					function(_inst) {
+						global.player_cash -= _inst.repair_cost;
+						_inst.building_health = 100;
+				},
+				function(_inst) { return _inst.repair_cost; },
+				function(_inst) { return (_inst.building_health < 100
+						&& global.player_cash >= _inst.repair_cost); }
+				),
+				new scr_UIButton("DEFENDER",
+					function(_inst) { purchase_faction_unit("defender", _inst); },
+					function(_inst) { return 300; },
+					function(_inst) { return (global.player_cash >= 300 && global.player_population < global.player_population_max); }
+				)	
+			];
 		break;
 	case obj_residence:
 		building_cost=250;
@@ -64,4 +85,33 @@ switch(object_index){
 		//to simulate a 10% tithe.
 		influence_generation = 15;
 		break;
+}
+
+//2 Button layout for regular buildings
+
+if (is_player_base == false){
+	building_actions = [
+		new scr_UIButton("UPGRADE",
+					function(_inst) {
+						global.player_cash -= _inst.upgrade_cost;
+						_inst.building_level += 1;
+						_inst.income_amount += 20;
+						_inst.upgrade_cost *= 2;
+						audio_play_sound(snd_upgrade, 10,false);
+				},
+				function(_inst) { return _inst.upgrade_cost; },
+				function(_inst) { return (_inst.building_level < 5
+						&& global.player_cash >= _inst.upgrade_cost); }
+	),
+	new scr_UIButton("REPAIR",
+					function(_inst) {
+						global.player_cash -= _inst.repair_cost;
+						_inst.building_health = 100;
+						audio_play_sound(snd_unlock, 10, false);
+				},
+				function(_inst) { return _inst.repair_cost; },
+				function(_inst) { return (_inst.building_health < 100
+						&& global.player_cash >= _inst.repair_cost); }
+					)
+	];
 }
