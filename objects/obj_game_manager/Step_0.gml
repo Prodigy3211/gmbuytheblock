@@ -129,7 +129,11 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 	  }
 	  exit;
 	}
-	
+
+
+if (inst.is_player_base == true) {
+	inst.building_actions = (inst.current_ui_page == 1) ? inst.building_actions_p1 : inst.building_actions_p2;
+}	
 	
 // Tracking button constructor clicks
 

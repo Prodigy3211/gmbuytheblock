@@ -37,8 +37,13 @@ switch(object_index){
 		
 		recruiter_count = 0; //Recruiter Unit can be bought at Player Base
 		recruiter_cost = 250;
-			building_actions = [
-				new scr_UIButton("RECRUITER",
+		
+		//Button Page Tracker
+		current_ui_page = 1;
+			
+			//Page 1 Buttons (Economic and Utility)
+			building_actions_p1 = [
+				new scr_UIButton("RECRUIT",
 					function(_inst) { purchase_faction_unit("recruiter", _inst);},
 					function(_inst) { return _inst.recruiter_cost; },
 					function(_inst) { return (global.player_cash >= _inst.recruiter_cost); }
@@ -52,12 +57,58 @@ switch(object_index){
 				function(_inst) { return (_inst.building_health < 100
 						&& global.player_cash >= _inst.repair_cost); }
 				),
+				new scr_UIButton("BOOKIE",
+					function(_inst) {purchase_faction_unit("bookie", _inst);},
+					function(_inst) {
+						var u_data = variable_struct_get(global.faction_units, "bookie");
+						return (u_data != undefined) ? u_data.cash_cost : 400;
+					},
+					function(_inst) {
+						var u_data = variable_struct_get(global.faction_units, "bookie");
+						var current_price = (u_data != undefined) ? u_data.cash_cost : 400;
+						return (global.player_cash >= current_price);
+					}
+				),
+				new scr_UIButton("NEXT->",
+					function(_inst) {_inst.current_ui_page = 2;},
+					function(_inst) { return 0; },
+					function(_inst) {return true; }
+				)
+			];
+			
+			//Page 2 buttons (Defensive and Covert Actions)
+			building_actions_p2 = [
 				new scr_UIButton("DEFENDER",
 					function(_inst) { purchase_faction_unit("defender", _inst); },
-					function(_inst) { return 300; },
-					function(_inst) { return (global.player_cash >= 300 && global.player_population < global.player_population_max); }
-				)	
+					function(_inst) {
+						var u_data = variable_struct_get(global.faction_units, "defender");
+						return (u_data != undefined) ? u_data.cash_cost : 300;
+					},
+					function(_inst) { 
+						var u_data = variable_struct_get(global.faction_units, "defender");
+						var current_price = (u_data != undefined) ? u_data.cash_cost : 300;
+						return (global.player_cash >= 300 && global.player_population < global.player_population_max); }
+				),
+				new scr_UIButton("SPY",
+					function(_inst) { purchase_faction_unit("spy", _inst); },
+					function (_inst) {
+						var u_data = variable_struct_get(global.faction_units, "spy");
+						return (u_data != undefined) ? u_data.cash_cost : 350;
+					},
+					function(_inst) {
+						var u_data = variable_struct_get(global.faction_units, "spy");
+						var current_price = (u_data != undefined) ? u_data.cash_cost: 350;
+						return (global.player_cash >= current_price);
+					}
+				),
+				new scr_UIButton("<= BACK",
+					function(_inst) { _inst.current_ui_page = 1; },
+					function(_inst) { return 0; },
+					function(_inst) {return true; }
+				)
 			];
+		building_actions = building_actions_p1;
+		
 		break;
 	case obj_residence:
 		building_cost=250;

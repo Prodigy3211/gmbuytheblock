@@ -226,6 +226,10 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 		draw_text (ui_x1 + 15 + (max_panel_w / 2), btn_y + btn_h + 3, "$" + string(b_cost));
 		
 	} else {
+		if(inst.is_player_base == true){
+			inst.building_actions = (inst.current_ui_page == 1) ? inst.building_actions_p1 : inst.building_actions_p2;
+		}
+		
 		//Dynamic layout calculates button layout based on building array length
 		var actions_array = inst.building_actions;
 		var total_actions = array_length(actions_array);
