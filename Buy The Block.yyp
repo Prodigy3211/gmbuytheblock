@@ -55,6 +55,7 @@
     {"id":{"name":"rm_title_screen","path":"rooms/rm_title_screen/rm_title_screen.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"scr_faction_systems","path":"scripts/scr_faction_systems/scr_faction_systems.yy",},},
+    {"id":{"name":"scr_game_sim_components","path":"scripts/scr_game_sim_components/scr_game_sim_components.yy",},},
     {"id":{"name":"scr_UIButton","path":"scripts/scr_UIButton/scr_UIButton.yy",},},
     {"id":{"name":"snd_backmusic","path":"sounds/snd_backmusic/snd_backmusic.yy",},},
     {"id":{"name":"snd_buy","path":"sounds/snd_buy/snd_buy.yy",},},

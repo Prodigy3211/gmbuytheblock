@@ -6,11 +6,19 @@ exit;
 }
 
 
-//Defender units reduce the enemy's attack successes
-var defense_mitigation = (global.garrison_units * 15);
-//Government must overcome this defense
-var final_threat_chance = max(0, global.enemy_threat - defense_mitigation);
+//Grab data from game sim script
 
+global.enemy_threat = component_calculate_government_threat();
+var defense_shield = component_calculate_defense_mitigation();
+
+//Calculate final break-trhough attack probability
+var final_threat_chance = max(0, global.enemy_threat - defense_shield);
+
+//Roll tatical sabotage dice
+
+
+//Base Government Anger
+var owned_counnt = 0
 
 // Roll a dice against the Active threat Meter to determine raids
 
@@ -19,7 +27,7 @@ if (random(100) <= final_threat_chance) {
 	var sabotage_targets = ds_list_create();
 	
 	with(obj_building_parent) {
-		//only Target Normal Player Buildings (Home Base is safe from smaller raids
+		//only Target Normal Player Buildings (Home Base is safe from smaller raids)
 		if(is_owned_by_player == true && is_player_base == false) {
 			ds_list_add(sabotage_targets, id);
 		}
@@ -48,7 +56,29 @@ if (random(100) <= final_threat_chance) {
 } else {
 	
 	if(global.enemy_threat > 0 && random(100) > final_threat_chance && global.garrison_units > 0) {
-	show_debug_message("Defenders have intercepted an enemy raid!");
+	//create list of targets that were saved from government raid	
+	var safe_targets = ds_list_create();
+	
+	with(obj_building_parent) {
+		if(is_owned_by_player == true && is_player_base == false){
+			ds_list_add(safe_targets, id);
+		}
+	}
+	
+	// Pick a building to spawn the text over
+	if(ds_list_size (safe_targets) > 0) {
+		var safe_building = ds_list_find_value(safe_targets, irandom(ds_list_size(safe_targets) - 1));
+	
+	
+	//Spawn Alert for defense
+	var txt = instance_create_layer(safe_building.x, safe_building.y - 30, "Instances", obj_floating_text);
+		txt.text= "Raid Intercepted!!";
+		txt.text_color = c_blue;
+		
+		audio_play_sound(snd_defender, 10, false);
+	}
+	
+	ds_list_destroy(safe_targets);
 }
 
 }
