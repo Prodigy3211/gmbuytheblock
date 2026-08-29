@@ -18,67 +18,56 @@ var final_threat_chance = max(0, global.enemy_threat - defense_shield);
 
 
 //Base Government Anger
-var owned_counnt = 0
+//var owned_count = 0;
 
 // Roll a dice against the Active threat Meter to determine raids
 
 if (random(100) <= final_threat_chance) {
-	//Scan the map and create a list of valid player-owned targets
-	var sabotage_targets = ds_list_create();
+	//Determine raid intensisty based on current threat level
+	var raid_intensity = 1;
+	var display_msg = "ENEMY SABOTAGE!";
 	
-	with(obj_building_parent) {
-		//only Target Normal Player Buildings (Home Base is safe from smaller raids)
-		if(is_owned_by_player == true && is_player_base == false) {
-			ds_list_add(sabotage_targets, id);
-		}
+	if(global.enemy_threat >= 80){
+		raid_intensity = 4; //Mass Critical Sector Raid
+		display_msg = "SECTOR RAIDED!";
+	} else if global.enemy_threat >= 50{
+		raid_intensity = 2; //Coordinated Strike
 	}
 	
-	//Raid if the player owns at least one property
-	if(ds_list_size(sabotage_targets) > 0) {
-		var victim = ds_list_find_value(sabotage_targets, irandom(ds_list_size(sabotage_targets)- 1));
+	//Script call pre sorted random victims
+	var victims = component_get_random_player_targets(raid_intensity);
+	
+	if(ds_list_size(victims) > 0 ) {
+		//Script call damage all selected buildings to 15% health in one command
+		component_damage_targets(victims, 15, display_msg, c_red);
 		
-		//Damage the Target's building health down to 15%
-		victim.building_health = 15;
+		audio_play_sound(snd_disaster, 12, false);
 		
-		//reduce Threat level after a successful attack
-		global.enemy_threat = max(0, global.enemy_threat - 30);
-		
-		//Sabotage Success sound effect
-		audio_play_sound(snd_disaster, 12 , false);
-		
-		//Spawn a flashing alert pop up on top of Node
-		var txt = instance_create_layer(victim.x, victim.y - 30, "Instances", obj_floating_text);
-		txt.text= "ENEMY SABOTAGE!";
-		txt.text_color = c_red;
+		//Reduce threat level
+		var threat_vent = (global.enemy_threat >= 80) ? 60 : 30;
+		global.enemy_threat = max(0, global.enemy_threat - threat_vent);
 	}
-	//clear data stucture list
-	ds_list_destroy(sabotage_targets);
+	
+	ds_list_destroy(victims);
+	
 } else {
 	
 	if(global.enemy_threat > 0 && random(100) > final_threat_chance && global.garrison_units > 0) {
-	//create list of targets that were saved from government raid	
-	var safe_targets = ds_list_create();
+	//Script call Grab a safe building
+	var safe_spot = component_get_random_player_targets(1);
 	
-	with(obj_building_parent) {
-		if(is_owned_by_player == true && is_player_base == false){
-			ds_list_add(safe_targets, id);
-		}
-	}
-	
-	// Pick a building to spawn the text over
-	if(ds_list_size (safe_targets) > 0) {
-		var safe_building = ds_list_find_value(safe_targets, irandom(ds_list_size(safe_targets) - 1));
-	
-	
-	//Spawn Alert for defense
-	var txt = instance_create_layer(safe_building.x, safe_building.y - 30, "Instances", obj_floating_text);
-		txt.text= "Raid Intercepted!!";
-		txt.text_color = c_blue;
+	if (ds_list_size(safe_spot) > 0) {
 		
-		audio_play_sound(snd_defender, 10, false);
+		var picked_instance = ds_list_find_value(safe_spot, 0);
+		
+		//script call pass the current health so that it spawns the text without being damanged
+		component_damage_targets(safe_spot, picked_instance.building_health, "RAID INTERCEPT", c_aqua)
+		
+		audio_play_sound(snd_defender, 10 , false);
+		
 	}
 	
-	ds_list_destroy(safe_targets);
+	ds_list_destroy(safe_spot);
 }
 
 }
