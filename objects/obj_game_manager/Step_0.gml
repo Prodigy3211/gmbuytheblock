@@ -76,177 +76,86 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 	var gui_mouse_x = device_mouse_x_to_gui(0);
 	var gui_mouse_y = device_mouse_y_to_gui(0);
 	
-	//Boxes bound to buttons
-	var btn_w = 130;
-	var btn_h =30;
+	//Automated boxes for buttons
+	var btn_h = 24;
+	var btn_y = ui_y1 + 158;
+	var max_panel_w = 285;
 	
-	var btn_left_x = ui_x1 + 20;
-	var btn_right_x = ui_x1 + 170;
-	var btn_y = ui_y1 + 150;
 	
 	//Pointer to selected target variables
 	var inst = global.selected_building;
 	var district_data = variable_struct_get(global.districts, inst.building_district);
+	var is_unlocked = district_data.unlocked;
+	var b_owned = inst.is_owned_by_player;
 	
-	//Click Detection: Primary Action Button (buy or upgrade building)
-	if (gui_mouse_x >= btn_left_x && gui_mouse_x <= btn_left_x + btn_w &&
-		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
+	
+	
+	//New Unlock Button override
+	
+	if(is_unlocked == false) {
+		
+		//If sector is locked then player cannot buy/ upgrade / repair
+		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
+		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h){
 			
-			//Sector Influence transaction here
-			if (district_data.unlocked == false) {
-				if(global.player_influence >= district_data.cost){
-				//Deduct influence points
-				global.player_influence -= district_data.cost;
-				district_data.unlocked = true;
-				
-				audio_play_sound(snd_unlock, 15, false);
-				
-				//Trigger a visual confirmation popup over the building
-				var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
-				txt.text = inst.building_district + "Unlocked!";
-				txt.text_color = c_lime;
-			}
-			exit;
-				
-		}	
-			
-			if(inst.is_player_base == true) {
-				//Check for Population Capacity before user can buy Recruiters at the home base
-				if (global.player_cash >= inst.recruiter_cost && global.player_population < global.player_population_max) {
-					
-					global.player_cash -= inst.recruiter_cost;
-					inst.recruiter_count += 1;
-					
-					//Add to current population
-					global.player_population += 1;
-					inst.recruiter_cost = ceil(inst.recruiter_cost * 1.4);
-					
-					audio_play_sound(snd_recruit, 15, false);
-					
-					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
-					txt.text = "-$" +string(inst.recruiter_cost);
-					txt.text_color= c_red;
-				} else if (global.player_population >= global.player_population_max){
-					show_debug_message("Population Cap REACH! Buy Residences to grow.");
-				}
-				exit;
-			}
-			
-			if (inst.is_owned_by_player == false) {
-				//Buy Logic
-				if(global.player_cash >= inst.building_cost) {
-					global.player_cash -= inst.building_cost;
-					inst.is_owned_by_player = true;
-					
-					//Sound effect for buying
-					audio_play_sound(snd_buy, 10, false);
-					
-					
-					var current_base_x = variable_instance_exists(inst,"base_width_scale") ? inst.base_width_scale : inst.image_xscale;
-					var current_base_y = variable_instance_exists( inst, "base_height_scale") ? inst.base_height_scale : inst.image_yscale;
-					
-					inst.image_blend = inst.owned_building_color;
-					
-					//floating Deduction test on top of Building
-					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
-					txt.text = "-$" + string(inst.building_cost);
-					txt.text_color = c_red; //Red for Spending that Cash!
-					
-					//Snap the HUD text to 150% for animation of deduction
-					hud_cash_scale = 1.5;
-					
-					
-					//Shake effect for building purchase
-					inst.target_scale_x = inst.base_width_scale * 1.3; //snap to 130% of size
-					inst.target_scale_y= inst.base_height_scale * 1.3;
-					
-					//4-pixel screen sshake
-					shake_magnitude = 4
-					shake_remain = 4
-					
-					inst.target_scale_x = current_base_x * 1.3;
-					inst.target_scale_y = current_base_y * 1.3;
-					inst.image_xscale = current_base_x *1.3;
-					inst.image_yscale = current_base_y * 1.3;
-				}
-			} else {
-				//Upgrade Button
-				if(inst.building_level < 5 && global.player_cash >= inst.upgrade_cost){
-					global.player_cash -= inst.upgrade_cost;
-					inst.building_level += 1;
-					
-					inst.income_amount += 20;
-					inst.upgrade_cost = inst.upgrade_cost * 2;
-					
-					audio_play_sound(snd_upgrade, 15, false);
-					
-					var current_base_x = variable_instance_exists(inst,"base_width_scale") ? inst.base_width_scale : inst.image_xscale;
-					var current_base_y = variable_instance_exists( inst, "base_height_scale") ? inst.base_height_scale : inst.image_yscale;
-					
-					inst.target_scale_x = current_base_x * 1.3;
-					inst.target_scale_y = current_base_y * 1.3;
-					inst.image_xscale = current_base_x *1.3;
-					inst.image_yscale = current_base_y * 1.3;
-					
-					//Made the player get money too fast
-					//inst.income_amount = ceil(inst.upgrade_cost * 1.5);
-					//inst.upgrade_cost = ceil(inst.upgrade_cost * 1.8);
-				
-				}
+			if (global.player_influence >= district_data.cost){
+					global.player_influence -= district_data.cost;
+					district_data.unlocked = true
+					audio_play_sound(snd_unlock, 15, false);
 			}
 		}
+		exit; // blocks other buttons below
+	}
+	
+	
+	//NEW BUTTON LOGIC
+	
+	if(b_owned == false){
 		
-		
-		//Click Detection : Repair button
-		if(gui_mouse_x >= btn_right_x && gui_mouse_x <= btn_right_x + btn_w &&
-			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y +btn_h) {
-				
-				if(inst.is_player_base == true) {
-					if (inst.building_health < 100){
-					//Base repair / hire defender
-					//If base is damaged then you must repair before you can hire a defender
-					if (global.player_cash >= inst.repair_cost){
-						global.player_cash -= inst.repair_cost;
-						inst.building_health = 100; //Bring HQ to full health
-						
-						audio_play_sound(snd_unlock, 15, false);
-						
-						var txt = instance_create_layer(inst.x, inst.y -20, "Instances", obj_floating_text);
-						txt.text = "-$" + string(inst.repair_cost) + " Repair";
-						txt.text_color = c_red;
-					}
-				} else {
-					//Base is at 100% health so now you can recruite defenders
-					var defender_cash_cost = 300; //If you change this value you must change it in Draw GUI as well
-					if(global.player_cash >= defender_cash_cost && global.player_population < global.player_population_max) {
-						global.player_cash -= defender_cash_cost;
-						global.garrison_units += 1;
-						global.player_population += 1;
-						
-						audio_play_sound(snd_defender,15,false);
-						
-						var txt = instance_create_layer(inst.x, inst.y -20, "Instances", obj_floating_text);
-						txt.text = "-$300 Def";
-						txt.text_color = c_red;
-					} else if (global.player_population >= global.player_population_max) {
-						show_debug_message("Population Cap Reached! Cannot recruit any more defenders");
-					}
-				}
+		//Purchase button
+		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
+			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
 			
-				exit; // Prevent the button from processing repairs and defenders at the same time
-				
-		} else {
-				
-				if (inst.is_owned_by_player == true && inst.building_health < 100) {
-					if(global.player_cash >= inst.repair_cost) {
-						global.player_cash -= inst.repair_cost;
-						inst.building_health = 100; //restore to full
-						audio_play_sound(snd_unlock, 15, false);
-					}
-				}
-				exit;
-			}
-			}
+			if (global.player_cash >= inst.building_cost){
+					global.player_cash -= inst.building_cost;
+					inst.is_owned_by_player= true;
+					inst.image_blend = inst.owned_building_color;
+					
+					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
+					txt.text = "-$" + string(inst.building_cost);
+					txt.text_colour = c_red;
+					audio_play_sound(snd_buy, 10, false);
+			}	 
+	  }
+	  exit;
+	}
+
+
+if (inst.is_player_base == true) {
+	inst.building_actions = (inst.current_ui_page == 1) ? inst.building_actions_p1 : inst.building_actions_p2;
+}	
+	
+// Tracking button constructor clicks
+
+var actions_array = inst.building_actions;
+var total_actions = array_length(actions_array);
+
+var space_per_button =max_panel_w / total_actions;
+var btn_w = space_per_button - 10;
+
+for (var i = 0; i < total_actions; i ++){
+	//Find the x coordinate
+	var btn_x = (ui_x1 + 15) + (i * space_per_button);
+	
+	//Run Hitbox checks using inst
+	if(actions_array[i].check_click(btn_x, btn_y, btn_w, btn_h, inst)){
+		break;
+	}
+}
+
+
+
+
 
 
 

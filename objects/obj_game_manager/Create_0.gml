@@ -25,6 +25,30 @@ global.districts = {
 //global.district_eastside_unlocked = false;
 //global.district_eastside_unlock_cost = 300;
 
+//Master Struct for All Units
+global.faction_units = {
+	recruiter:{
+		count: 0,
+		cash_cost: 250,
+		pop_cost: 1
+	},
+	defender:{
+		count: 0,
+		cash_cost: 300,
+		pop_cost: 1
+	},
+	spy:{
+		count: 0,
+		cash_cost: 1000,
+		pop_cost: 2
+	},
+	bookie:{
+		count: 0,
+		cash_cost: 600,
+		pop_cost: 1
+	}
+};
+
 
 
 //Payout timer (60 frames = 1 second at 60fps. 30 frames = 1secone at 30fps)
@@ -80,3 +104,6 @@ alarm[2] = global.threat_check_rate; //Alarm 2 is now our enemy Director
 //instructions
 
 show_instructions = true; //When game starts display
+
+
+
