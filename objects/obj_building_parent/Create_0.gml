@@ -20,7 +20,7 @@ target_scale = 1.0;
 is_hovered = false;
 image_blend = c_dkgrey;
 is_player_base = false;
-building_district = "West Side";
+building_district = component_get_zone_by_coordinates(x);
 alert_bob_timer = 0; //Animate Floating exclamation mark icon
 
 

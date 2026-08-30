@@ -18,7 +18,7 @@ global.districts = {
 	"Downtown": { unlocked: false, cost: 175},
 	"East Side": { unlocked: false, cost: 300},
 	"Uptown": { unlocked: false, cost: 1000},
-	"Capital Hill": { unlocked: false, cost: 2000},
+	"Capitol Hill": { unlocked: false, cost: 2000},
 };
 //global.district_uptown_unlocked = false;
 //global.district_uptown_unlock_cost = 50 // costs 50 influence to unlock Uptown

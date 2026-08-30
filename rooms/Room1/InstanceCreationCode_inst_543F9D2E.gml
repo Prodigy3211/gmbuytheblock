@@ -1,1 +1,0 @@
-building_district = "Uptown";

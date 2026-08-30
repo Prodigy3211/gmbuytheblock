@@ -161,3 +161,19 @@ function component_can_afford_district_unlock(_district_name){
 }
 
 
+//Zone coordinates for creating districts!
+function component_get_zone_by_coordinates(_x_pos){
+	//Divid total map room width into 5 vertical Sectors
+	var sector_width = room_width / 5;
+	
+	//determine which sector slot the coordinates sit within.(0 - 4)
+	var sector_index = floor(_x_pos / sector_width);
+	
+	switch (sector_index) {
+		case 0: return "West Side";
+		case 1: return "Downtown";
+		case 2: return "East Side";
+		case 3: return "Uptown";
+		default: return "Capitol Hill";
+	}
+}
