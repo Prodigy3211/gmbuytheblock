@@ -49,14 +49,17 @@ with (obj_building_parent) {
 	if(is_owned_by_player == true && building_health >= 30) {
 		//stops generating cash if health drops below 31points
 			
+			//dynamic revebye evaluation
+			if (object_index == obj_temple){
+				base_income_rate = component_calculate_temple_tithe();
+			}
+			
 			var dynamic_income = income_amount * building_level;
-			
-			
 			
 			total_building_cash += dynamic_income;
 			
-			//Tracks housing data and total population cap
-			total_cap_bonus += (population_cap_bonus * building_level);
+			//Dynamic housing pool... Will help with Temple curve based on population
+			total_cap_bonus += component_get_building_poulation_bonus(object_index, building_level, population_cap_bonus);
 			
 			
 			//Old Population Logic that treated population like cash

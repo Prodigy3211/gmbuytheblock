@@ -19,7 +19,7 @@ if (shake_remain > 0){
 	//Add random offset based on current shake
 	var rx = random_range(-shake_remain, shake_remain);
 	var ry = random_range(-shake_remain, shake_remain);
-	camera_set_view_pos(camera, cam_x + rx, cam_y = ry);
+	camera_set_view_pos(camera, cam_x + rx, cam_y + ry);
 	
 	//Decay the shake variables over time
 	shake_remain = max(0, shake_remain - 0.5);
@@ -62,7 +62,7 @@ camera_set_view_pos(view_camera[0], global.cam_x, global.cam_y)
 
 //Button clicks only work when building is selected
 
-if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
+if(global.selected_building == noone) {
 	
 	exit;
 }
@@ -98,12 +98,30 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
 		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h){
 			
-			if (global.player_influence >= district_data.cost){
+			
+			//Check for clicks
+			if(mouse_check_button_pressed(mb_left)){
+				//SCRIPT CALL: Verify wallet authority to make purchase
+				
+			
+			if (component_can_afford_district_unlock(inst.building_district)){
+					var direct_cost = component_get_district_unlock_cost(inst.building_district);
+				
 					global.player_influence -= district_data.cost;
 					district_data.unlocked = true
+					
 					audio_play_sound(snd_unlock, 15, false);
+					
+					var txt = instance_create_layer(inst.x, inst.y - 40, "Instances", obj_floating_text);
+					txt.text = string_upper(inst.building_district) + " UNLOCKED!";
+					txt.text_color = c_purple;
+			} else {
+				//Rejection feedback
+				show_debug_message("Not enough influence!");
+			
 			}
 		}
+	}	
 		exit; // blocks other buttons below
 	}
 	
@@ -116,19 +134,24 @@ if(global.selected_building == noone || !mouse_check_button_pressed(mb_left)) {
 		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
 			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
 			
-			if (global.player_cash >= inst.building_cost){
-					global.player_cash -= inst.building_cost;
-					inst.is_owned_by_player= true;
-					inst.image_blend = inst.owned_building_color;
+			if(mouse_check_button_pressed(mb_left)) {
+				if (global.player_cash >= inst.building_cost){
+						global.player_cash -= inst.building_cost;
+						inst.is_owned_by_player= true;
+						inst.image_blend = inst.owned_building_color;
 					
 					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
 					txt.text = "-$" + string(inst.building_cost);
-					txt.text_colour = c_red;
+					txt.text_color = c_red;
 					audio_play_sound(snd_buy, 10, false);
-			}	 
-	  }
-	  exit;
+			} else {
+				//Rejection Feed back
+				show_debug_message("You can't afford this brokie!");
+			}
+		}
 	}
+	  exit;
+}
 
 
 if (inst.is_player_base == true) {
@@ -143,14 +166,18 @@ var total_actions = array_length(actions_array);
 var space_per_button =max_panel_w / total_actions;
 var btn_w = space_per_button - 10;
 
-for (var i = 0; i < total_actions; i ++){
-	//Find the x coordinate
-	var btn_x = (ui_x1 + 15) + (i * space_per_button);
+
+if(mouse_check_button_pressed(mb_left)) {
+	for (var i = 0; i < total_actions; i ++){
+		//Find the x coordinate
+		var btn_x = (ui_x1 + 15) + (i * space_per_button);
 	
-	//Run Hitbox checks using inst
-	if(actions_array[i].check_click(btn_x, btn_y, btn_w, btn_h, inst)){
-		break;
+		//Run Hitbox checks using inst
+		if(actions_array[i].check_click(btn_x, btn_y, btn_w, btn_h, inst)){
+			break;
+		}
 	}
+
 }
 
 

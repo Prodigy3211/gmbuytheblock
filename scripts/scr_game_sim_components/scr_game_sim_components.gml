@@ -113,3 +113,51 @@ function component_trigger_natural_disaster(){
 	
 	ds_list_destroy(victims);
 }
+
+
+
+//Temple 10% tithe tax
+
+function component_calculate_temple_tithe(){
+	var cash_per_citizen = 12;
+	var raw_tithe = (global.player_population_max * cash_per_citizen) * 0.10;
+	return max(200, floor(raw_tithe));
+}
+
+
+//Review building type and level to determine it's impact on max population
+
+function component_get_building_poulation_bonus(_object_index, _current_level, _base_bonus){
+	//If building is a standard residence then this math applies
+	
+	if(_object_index == obj_residence) {
+		switch(_current_level) {
+			case 1: return 2; //Cramped Projects (West Side)
+			case 2: return 6; //Apartment Complex (Downtown)
+			default: return 15; //Tier 3+ Luxury High rises
+		}
+	}
+	
+	//Fallback calculation for other building types that may grant population
+	return _base_bonus * _current_level;
+
+}
+
+
+//Gets influence cost of districts
+function component_get_district_unlock_cost(_district_name) {
+	if(variable_struct_exists(global.districts, _district_name)){
+		var district_data = variable_struct_get(global.districts, _district_name);
+		return district_data.cost;
+	}
+	return 0;
+}
+
+//Does player have enough influence??
+function component_can_afford_district_unlock(_district_name){
+	var target_cost = component_get_district_unlock_cost(_district_name);
+	return (global.player_influence >= target_cost);
+	
+}
+
+
