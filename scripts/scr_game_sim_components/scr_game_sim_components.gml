@@ -162,18 +162,48 @@ function component_can_afford_district_unlock(_district_name){
 
 
 //Zone coordinates for creating districts!
-function component_get_zone_by_coordinates(_x_pos){
-	//Divid total map room width into 5 vertical Sectors
-	var sector_width = room_width / 5;
+function component_get_zone_by_coordinates(_x_pos, _y_pos){
+	//Dividing the map into 5 zones with one zone in the center
+	//into 5 vertical Sectors
+	var center_x = room_width / 2;
+	var center_y = room_height / 2;
 	
-	//determine which sector slot the coordinates sit within.(0 - 4)
-	var sector_index = floor(_x_pos / sector_width);
+	//Size of Sector 5 (Capitol Hill)
+	//Central box from Dead center
+	var center_box_width = 800;
+	var center_box_height = 600;
 	
-	switch (sector_index) {
-		case 0: return "West Side";
-		case 1: return "Downtown";
-		case 2: return "East Side";
-		case 3: return "Uptown";
-		default: return "Capitol Hill";
+	//Check if obj's coordinates fall inside central hub
+	if (_x_pos >= (center_x - center_box_width / 2) && _x_pos <= (center_x + center_box_width / 2) &&
+		_y_pos >= (center_y - center_box_height / 2) && _y_pos <= (center_y + center_box_height / 2)) {
+			return "Capitol Hill";
+		}
+		
+	//If not center then which of the 4 corners
+	if (_x_pos < center_x) {
+		//Left side of the Map
+		if(_y_pos < center_y) {
+			return "West Side"; //Sector One: Top/Mid Left
+		} else {
+			return "Downtown"; // Sector Two: Bottom Left
+		}
+	}else{
+		//Right side
+		if(_y_pos < center_y) {
+			return "Uptown"; //Sector 3: Top Right
+		} else {
+			return "East Side"; // Sector 4 bottom right
+		}
+	
 	}
-}
+	
+	
+	
+//	switch (sector_index) {
+//		case 0: return "West Side";
+//		case 1: return "Downtown";
+//		case 2: return "East Side";
+//		case 3: return "Uptown";
+//		default: return "Capitol Hill";
+//	}
+};
