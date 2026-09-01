@@ -127,7 +127,7 @@ function component_calculate_temple_tithe(){
 
 //Review building type and level to determine it's impact on max population
 
-function component_get_building_poulation_bonus(_object_index, _current_level, _base_bonus){
+function component_get_building_population_bonus(_object_index, _current_level, _base_bonus){
 	//If building is a standard residence then this math applies
 	
 	if(_object_index == obj_residence) {
@@ -207,3 +207,39 @@ function component_get_zone_by_coordinates(_x_pos, _y_pos){
 //		default: return "Capitol Hill";
 //	}
 };
+
+
+//Sector Cash Multipliers
+function component_get_sector_cash_multiplier(_district_name){
+	switch(_district_name){
+		case "West Side": return 0.75; // Starting area, low costs, low income amount
+		case "Downtown" : return 1.00;
+		case "East Side": return 1.25;
+		case "Uptown": return 1.50;
+		case "Capitol Hill": return 2.00;
+		default: return 1.00;
+	}
+}
+
+//Sprite Swapper for Districts or upgrades
+function component_update_building_visuals(_inst) {
+	//Clean up district names
+	var sector_prefix = string_replace_all(_inst.building_district, " ",""); //removes spaces from districts
+	
+	//Get the default asset name
+	var building_type = object_get_name(_inst.object_index);
+	building_type = string_replace(building_type, "obj_", "")//removed the obj tag from the names
+	
+	//Construct the target sprite name
+	var target_sprite_name = "spr_"+ sector_prefix + "_" + building_type + "_lvl" + string(_inst.building_level);
+	
+	//Does this sprite exist?
+	var target_sprite_asset = asset_get_index(target_sprite_name);
+	
+	//Apply the existing sprite
+	if(sprite_exists(target_sprite_asset)){
+		_inst.sprite_index = target_sprite_asset;
+	} else {
+		show_debug_message("NOTICE: Sprite ' " +target_sprite_name +"' not found");
+	}
+}
