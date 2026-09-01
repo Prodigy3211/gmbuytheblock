@@ -190,9 +190,9 @@ function component_get_zone_by_coordinates(_x_pos, _y_pos){
 	}else{
 		//Right side
 		if(_y_pos < center_y) {
-			return "Uptown"; //Sector 3: Top Right
+			return "East Side"; //Sector 3: Top Right
 		} else {
-			return "East Side"; // Sector 4 bottom right
+			return "Uptown"; // Sector 4 bottom right
 		}
 	
 	}
@@ -210,6 +210,7 @@ function component_get_zone_by_coordinates(_x_pos, _y_pos){
 
 
 //Sector Cash Multipliers
+//CASE SENSITIVE AND SPELLING
 function component_get_sector_cash_multiplier(_district_name){
 	switch(_district_name){
 		case "West Side": return 0.75; // Starting area, low costs, low income amount
@@ -243,3 +244,28 @@ function component_update_building_visuals(_inst) {
 		show_debug_message("NOTICE: Sprite ' " +target_sprite_name +"' not found");
 	}
 }
+
+//Real Estate cost multiplier
+//CASE SENSITIVE AND SPELLING
+function component_get_sector_cost_multiplier(_district_name) {
+	switch (_district_name){
+		case "West Side": return 0.60; //Cheapest buildings
+		case "Downtown": return 1.00;
+		case "East Side": return 1.30;
+		case "Uptown": return 1.80;
+		case "Capitol Hill": return 2.50; //Most expesive buildings
+		default:
+	}
+
+}
+
+
+//Calculate building cost base based on the multiplier
+function component_calculate_building_purchase_cost(_base_cost, _district_name){
+	var cost_multiplier = component_get_sector_cost_multiplier(_district_name);
+	
+	//muliply and filter through a floor for whole numbers
+	return floor(_base_cost * cost_multiplier);
+}
+
+

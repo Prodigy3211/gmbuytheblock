@@ -135,13 +135,16 @@ if(global.selected_building == noone) {
 			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
 			
 			if(mouse_check_button_pressed(mb_left)) {
-				if (global.player_cash >= inst.building_cost){
-						global.player_cash -= inst.building_cost;
+				//Script call for purchase multiplier
+				var local_purchase_price = component_calculate_building_purchase_cost(inst.building_cost, inst.building_district);
+				
+				if (global.player_cash >= local_purchase_price){
+						global.player_cash -= local_purchase_price;
 						inst.is_owned_by_player= true;
 						inst.image_blend = inst.owned_building_color;
 					
 					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
-					txt.text = "-$" + string(inst.building_cost);
+					txt.text = "-$" + string(local_purchase_price);
 					txt.text_color = c_red;
 					audio_play_sound(snd_buy, 10, false);
 			} else {
