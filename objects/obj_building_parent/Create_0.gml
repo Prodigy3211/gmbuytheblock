@@ -20,8 +20,9 @@ target_scale = 1.0;
 is_hovered = false;
 image_blend = c_dkgrey;
 is_player_base = false;
-building_district = "West Side";
+building_district = component_get_zone_by_coordinates(x, y); //get coordinates of the building to assign zone
 alert_bob_timer = 0; //Animate Floating exclamation mark icon
+component_update_building_visuals(id);
 
 
 //Set cost based on object name
@@ -146,6 +147,8 @@ if (is_player_base == false){
 					function(_inst) {
 						global.player_cash -= _inst.upgrade_cost;
 						_inst.building_level += 1;
+						//Should update the sprite upon upgrade
+						component_update_building_visuals(id);
 						_inst.income_amount += 20;
 						_inst.upgrade_cost *= 2;
 						audio_play_sound(snd_upgrade, 10,false);

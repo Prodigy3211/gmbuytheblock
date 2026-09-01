@@ -141,7 +141,7 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	// Status text based on ownership
 	var owner_text = b_owned ? "Owned By You" : "Owned by City";
 	draw_text(ui_x1 + 20, ui_y1 + 18, "Status: " + owner_text);
-	draw_text(ui_x1 + 20, ui_y1 + 40, "Price: $" +string(b_cost));
+	//draw_text(ui_x1 + 20, ui_y1 + 40, "Price: $" +string(b_cost));
 	draw_text(ui_x1 + 20, ui_y1 + 62, "Condition: " +string(ceil(b_health)) +" %");
 	
 	//Upgrade
@@ -213,8 +213,10 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	} else if (b_owned == false) {
 	//Button A (Buy or Upgrade) Left Button Slot 'Buy, Hire,Max Leve, Upgrade'	
 	
+		var local_b_cost = component_calculate_building_purchase_cost(b_cost, inst.building_district);
+	
 		//BUY BUTTON
-		var can_buy = (global.player_cash >= b_cost);
+		var can_buy = (global.player_cash >= local_b_cost);
 		draw_set_colour(can_buy ? c_gray : c_dkgray);	
 		draw_rectangle(ui_x1 + 15, btn_y, ui_x1 + 15 + max_panel_w, btn_y + btn_h, false);
 		
@@ -223,7 +225,7 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 		draw_text(ui_x1 + 15 + (max_panel_w / 2), btn_y + 4, "BUY BUILDING");
 		
 		draw_set_colour(c_silver);
-		draw_text (ui_x1 + 15 + (max_panel_w / 2), btn_y + btn_h + 3, "$" + string(b_cost));
+		draw_text (ui_x1 + 15 + (max_panel_w / 2), btn_y + btn_h + 3, "$" + string(local_b_cost));
 		
 	} else {
 		if(inst.is_player_base == true){
