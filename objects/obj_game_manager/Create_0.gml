@@ -14,11 +14,11 @@ global.garrison_units= 0; //Starting defenders
 
 //Master Struct of All City Districts
 global.districts = {
-	"West Side": { unlocked: true, cost: 0},
-	"Downtown": { unlocked: false, cost: 175},
-	"East Side": { unlocked: false, cost: 300},
-	"Uptown": { unlocked: false, cost: 1000},
-	"Capitol Hill": { unlocked: false, cost: 2000},
+	"West Side": { unlocked: true, cost: 0, cash_cost: 0},
+	"Downtown": { unlocked: false, cost: 175, cash_cost: 1000},
+	"East Side": { unlocked: false, cost: 300, cash_cost: 1500},
+	"Uptown": { unlocked: false, cost: 1000, cash_cost: 3500},
+	"Capitol Hill": { unlocked: false, cost: 2000, cash_cost: 7500},
 };
 //global.district_uptown_unlocked = false;
 //global.district_uptown_unlock_cost = 50 // costs 50 influence to unlock Uptown

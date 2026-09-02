@@ -106,8 +106,11 @@ if(global.selected_building == noone) {
 			
 			if (component_can_afford_district_unlock(inst.building_district)){
 					var direct_cost = component_get_district_unlock_cost(inst.building_district);
+					var cash_cost = component_get_district_unlock_cash_cost(inst.building_district);
 				
-					global.player_influence -= district_data.cost;
+					global.player_influence -= direct_cost;
+					global.player_cash -= cash_cost;
+					
 					district_data.unlocked = true
 					
 					audio_play_sound(snd_unlock, 15, false);

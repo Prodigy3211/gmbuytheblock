@@ -192,8 +192,11 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	//We are next the buy buttons inside of a new Sector Unlock section
 	
 	if(is_unlocked == false){
-	//Check if you can afford with Influence
-	var can_afford_unlock = (global.player_influence >= unlock_cost);
+		//Fetch how much money it costs to unlock
+		var cash_unlock_cost = component_get_district_unlock_cash_cost(inst.building_district);
+		
+		//Check if you can afford with Influence
+		var can_afford_unlock = (global.player_influence >= unlock_cost && global.player_cash >= cash_unlock_cost);
 	
 	//Draw the unlock box
 	draw_set_colour(can_afford_unlock ? c_gray : c_dkgray);
@@ -208,6 +211,10 @@ draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "
 	draw_set_colour(c_purple);
 	draw_set_halign(fa_left);
 	draw_text(ui_x1 + 20, ui_y1 + 84, inst.building_district + " Zone: " + string(unlock_cost) + " Influence");
+	
+	//display cash cost
+	draw_set_colour(c_lime);
+	draw_text(ui_x1 + 20, ui_y1 + 104, "Requires: $" + string(cash_unlock_cost) + " Cash");
 	
 	
 	} else if (b_owned == false) {
