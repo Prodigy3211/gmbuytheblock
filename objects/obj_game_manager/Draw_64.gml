@@ -42,6 +42,71 @@ if(show_instructions == true) {
 	exit;
 }
 
+//Story Card Draw!
+
+if(global.story_active == true && global.active_story_struct != noone){
+	var current_event = global.active_story_struct;
+	
+	//Center The narrative card
+	var card_w = 600;
+	var card_h = 300;
+	var cx1 = cx - (card_w / 2);
+	var cy1 = cy - (card_h / 2);
+	var cx2 = cx1 + card_w;
+	var cy2 = cy1 + card_h;
+	
+	//Draw full screen blur in background
+	draw_set_alpha(0.75);
+	draw_set_color(c_black);
+	draw_rectangle(0,0, scr_w, scr_h, false);
+	
+	//Draw StoryPanel frame
+	draw_set_alpha(0.95);
+	draw_set_color(c_dkgray);
+	draw_rectangle(cx1, cy1, cx2, cy2, true);
+	
+	draw_set_alpha(1.0);
+	draw_set_color(c_purple) //faction Border
+	draw_rectangle(cx1, cy1, cx2, cy2, true);
+	
+	//Draw Title
+	draw_set_color(c_white);
+	draw_set_halign(fa_center);
+	draw_text_transformed(cx, cy1 + 25, current_event.title, 1.2, 1.2, 0);
+	
+	//Draw narrative message body
+	draw_set_halign(fa_left);
+	draw_text_ext(cx1+ 40, cy1 + 80, current_event.text, 22, card_w - 80);
+	
+	//Acknowledge or confirm button boundary
+	var s_btn_y = cy2 - 50;
+	var s_btn_w = 200;
+	var s_btn_h = 30;
+	var sbx1 = cx - (s_btn_w / 2);
+	var sbx2 = sbx1 + s_btn_w;
+	
+	var gui_mouse_x = device_mouse_x_to_gui(0);
+	var gui_mouse_y = device_mouse_y_to_gui(0);
+	var is_hovering_story_btn = (gui_mouse_x >= sbx1 && gui_mouse_x <= sbx2 && gui_mouse_y >= s_btn_y && gui_mouse_y <= s_btn_y + s_btn_h);
+	
+	draw_set_color(is_hovering_story_btn ? c_white : c_purple);
+	draw_rectangle(sbx1, s_btn_y, sbx2, s_btn_y + s_btn_h, false);
+	
+	
+	//Text labels in the close box
+	draw_set_colour(is_hovering_story_btn ? c_black : c_white);
+	draw_set_halign(fa_center);
+	draw_set_valign(fa_middle);
+	draw_text(cx, s_btn_y + (s_btn_h / 2), "UNDERSTOOD");
+	
+	//Reset states
+	draw_set_alpha(1.0);
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+	
+	exit
+}
+
 
 //RESOURCE TRACKING CARD
 

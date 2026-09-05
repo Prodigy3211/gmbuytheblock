@@ -9,7 +9,22 @@ global.net_influence_tick = 0;
 global.garrison_units= 0; //Starting defenders
 
 
+//Nrrative State Tracker
+enum StoryPhase {
+	Intro,
+	RisingThreat,
+	UndergroundWar,
+	EndGame
+}
 
+
+global.story_phase = StoryPhase.Intro;
+global.story_active = false;
+global.active_story_struct = noone;
+
+//Controls when a Story event freezes the games
+global.saved_sabotage_time = -1;
+global.saved_economy_time = -1;
 
 
 //Master Struct of All City Districts

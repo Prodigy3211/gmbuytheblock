@@ -9,10 +9,10 @@ if (show_instructions == true) {
 		exit;
 }
 
-//if(global.story_active == true){
-//	scr_story_director();
-//	exit;
-//}
+if(global.story_active == true){
+	story_director_update();
+	exit;
+}
 
 
 
@@ -137,11 +137,31 @@ if(global.selected_building == noone) {
 						global.player_cash -= local_purchase_price;
 						inst.is_owned_by_player= true;
 						inst.image_blend = inst.owned_building_color;
+						
+						//Building shake
+						building_shake(inst,3,12);
 					
 					var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
 					txt.text = "-$" + string(local_purchase_price);
 					txt.text_color = c_red;
 					audio_play_sound(snd_buy, 10, false);
+					
+					//First narrative moment
+					if(global.story_phase == StoryPhase.Intro){
+						//Use a Struct to create the event
+						var fist_contact_event = {
+							title: "!!MESSAGE FROM THE MAYOR!!",
+							text: "Attention Citizen: My Office has taken notice of your recent purchases on the west side. I'm not sure how you got the money to do this, but it all looks legal... for now. \\nYour assets Have been logged. The city will reclaim any building that you don't maintain.",
+							effect: function(){
+								//Immediate gameplay Consequence
+								global.enemy_threat += 25;
+								//Advance the Story
+								global.story_phase =StoryPhase.RisingThreat;
+							}
+						};
+						
+						trigger_story_event(fist_contact_event);
+					}
 			} else {
 				//Rejection Feed back
 				show_debug_message("You can't afford this brokie!");
