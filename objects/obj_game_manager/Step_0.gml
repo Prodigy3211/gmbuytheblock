@@ -9,26 +9,11 @@ if (show_instructions == true) {
 		exit;
 }
 
+//if(global.story_active == true){
+//	scr_story_director();
+//	exit;
+//}
 
-//apply camera screen shake
-if (shake_remain > 0){
-	var camera = view_camera[0];
-	var cam_x = camera_get_view_x(camera);
-	var cam_y = camera_get_view_y(camera);
-	
-	//Add random offset based on current shake
-	var rx = random_range(-shake_remain, shake_remain);
-	var ry = random_range(-shake_remain, shake_remain);
-	camera_set_view_pos(camera, cam_x + rx, cam_y + ry);
-	
-	//Decay the shake variables over time
-	shake_remain = max(0, shake_remain - 0.5);
-}
-
-
-//smoothly animate HUD back to Scale 100%
-
-hud_cash_scale = lerp(hud_cash_scale, 1.0, 0.1);
 
 
 // Keyboard Map navigation
@@ -55,9 +40,16 @@ if (move_down) global.cam_y += cam_speed;
 global.cam_x = clamp(global.cam_x, 0, room_width - 1366);
 global.cam_y = clamp(global.cam_y, 0, room_height - 768);
 
+
+
 //Update the games active lens position with the clamp coordinates
 
 camera_set_view_pos(view_camera[0], global.cam_x, global.cam_y)
+
+
+//smoothly animate HUD back to Scale 100%
+
+//hud_cash_scale = lerp(hud_cash_scale, 1.0, 0.1);
 
 
 //Button clicks only work when building is selected

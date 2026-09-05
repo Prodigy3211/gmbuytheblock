@@ -1,24 +1,28 @@
 //Newer Version of building highlights
 
+var draw_x = x + (variable_instance_exists(id, "shake_x_offset") ? shake_x_offset : 0);
+var draw_y = y + (variable_instance_exists(id, "shake_y_offset") ? shake_y_offset : 0);
+
+
 //Keep buildings clear of tint when owned
-draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
+draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
 
 //If the City Owns it, give it a dark inactive look.
 if (is_owned_by_player == false) {
 	gpu_set_blendmode(bm_subtract);
 	//Add dark sillouette
-	draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle,c_black, 0.4);
+	draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_yscale, image_angle,c_black, 0.4);
 	gpu_set_blendmode(bm_normal);
 } else {
 	//Player Owned highlight
 	draw_set_colour(owned_building_color);
-	draw_circle(x, y +(sprite_height/2) - 10, 6, false);
+	draw_circle(draw_x, draw_y +(sprite_height/2) - 10, 6, false);
 }
 
 //Hover handling
 if(is_hovered == true) {
 	gpu_set_blendmode(bm_add);
-	draw_sprite_ext(sprite_index, image_index, x, y, image_xscale, image_yscale, image_angle, c_white, 0.25);
+	draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_yscale, image_angle, c_white, 0.25);
 	gpu_set_blendmode(bm_normal);
 }
 
@@ -32,8 +36,8 @@ if (is_owned_by_player == true && building_health <= 30) {
 	
 	//place the icon above the building sprite
 	var sprite_center_offset = (sprite_get_width(sprite_index) / 2 ) - sprite_get_xoffset(sprite_index);
-	var icon_x = x + (sprite_center_offset * image_xscale) ;
-	var icon_y = (y - ((sprite_height * image_yscale) / 2)) - 25 + bob_offset;
+	var icon_x = draw_x + (sprite_center_offset * image_xscale) ;
+	var icon_y = (draw_y - ((sprite_height * image_yscale) / 2)) - 25 + bob_offset;
 	
 	//Bold High contract red ! indicator
 	draw_set_colour(c_red);
