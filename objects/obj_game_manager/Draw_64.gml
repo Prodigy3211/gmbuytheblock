@@ -156,7 +156,7 @@ draw_rectangle(20, 125, bar_fill_x, 135, false);
 //Show numerical percentage
 draw_set_colour(c_white);
 draw_set_halign(fa_left);
-draw_text(210, 121, "Government Anger: " +string(floor(global.enemy_threat)) + "%");
+draw_text(210, 121, "Government Threat: " +string(floor(global.enemy_threat)) + "%");
 
 
 //Draw out the Building Inspectional Panel if Building is Selected
