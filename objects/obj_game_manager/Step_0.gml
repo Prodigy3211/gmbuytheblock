@@ -20,17 +20,25 @@ if(global.story_active == true){
 
 // Keyboard Map navigation
 
+//Move speed
+var base_speed = 12;
+var scroll_speed_x = base_speed * 2.0; //for wide frame axis
+var scroll_speed_y = base_speed;
+
 //Input keys
-var move_left = keyboard_check(vk_left) || keyboard_check(ord("A"));
-var move_right = keyboard_check(vk_right) || keyboard_check(ord("D"));
-var move_up = keyboard_check(vk_up) || keyboard_check(ord("W"));
-var move_down = keyboard_check(vk_down) || keyboard_check(ord("S"));
+var move_left = keyboard_check(vk_left) || keyboard_check(ord("A")) global.cam_y -= scroll_speed_y;
+var move_right = keyboard_check(vk_right) || keyboard_check(ord("D"))global.cam_y += scroll_speed_y;
+var move_up = keyboard_check(vk_up) || keyboard_check(ord("W"))global.cam_x -= scroll_speed_x;
+var move_down = keyboard_check(vk_down) || keyboard_check(ord("S"))global.cam_x += scroll_speed_x;
 
 // Change Camera target position based on which keys are held
 if (move_left) global.cam_x -= cam_speed;
 if (move_right) global.cam_x += cam_speed;
 if (move_up) global.cam_y -= cam_speed;
 if (move_down) global.cam_y += cam_speed;
+
+var max_scroll_x = max(0, room_width - 1366);
+var max_scroll_y = max(0, room_height - 768);
 
 // Get the Screen size
 //var view_w = camera_get_view_width(view_camera);
@@ -39,8 +47,8 @@ if (move_down) global.cam_y += cam_speed;
 // Apply Boundary
 // Clamp (variable, minumum_allowed, max allowed)
 
-global.cam_x = clamp(global.cam_x, 0, room_width - 1366);
-global.cam_y = clamp(global.cam_y, 0, room_height - 768);
+global.cam_x = clamp(global.cam_x, 0, max_scroll_x);
+global.cam_y = clamp(global.cam_y, 0, max_scroll_y);
 
 
 

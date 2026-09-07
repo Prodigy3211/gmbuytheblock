@@ -107,6 +107,9 @@ global.story_database = {
 		text: "Dear Leader! They've hit our base! You've got to do something or we'll lose everything.",
 		effect: function(){
 			if(instance_exists(global.homebase_instance)){
+				//Center camera on homebase
+					global.cam_x = global.homebase_instance.x - (display_get_gui_width() / 2);
+					global.cam_y = global.homebase_instance.y - (display_get_gui_height() / 2);
 					building_shake(global.homebase_instance, 15, 60);
 			}
 			
