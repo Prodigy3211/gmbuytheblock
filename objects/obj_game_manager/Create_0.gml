@@ -1,7 +1,10 @@
+global.game_tick = 0;
 global.player_cash = 1000; // Used to buy units and buildings
 global.player_population_max= 5; //Max Population
 global.player_population = 0; //Total Population
 global.player_influence = 0; //spent on policies
+global.homebase_instance = noone; // Player base pointer
+
 global.selected_building = noone; //ensures that no building is selected as default
 global.city_owned_percent = 0;
 global.net_cash_tick = 0;
@@ -25,6 +28,15 @@ global.active_story_struct = noone;
 //Controls when a Story event freezes the games
 global.saved_sabotage_time = -1;
 global.saved_economy_time = -1;
+
+
+//triggers
+global.story_unit_cost_multiplier = 1.0; //Normal cost of units
+
+global.triggered_homebase_siege = false;
+global.triggered_ownership_25 = false;
+global.triggered_final_lockdown = false;
+global.triggered_ownership_50 = false;
 
 
 //Master Struct of All City Districts
@@ -63,6 +75,72 @@ global.faction_units = {
 		pop_cost: 1
 	}
 };
+
+
+//Story beats!
+global.story_database = {
+	
+	
+	//Phase:CIA Drug Dispense(Triggered by 25% buy out)
+	ownership_25:{
+		title:"!!! OPEN DRUG MARKET !!!",
+		text:"Reports indicate that strange black vans have appeared throughout our neighborhoods, Green Magic makes your day a little less stressful! We've got to do something about these drug dealers.",
+		effect: function(){
+			global.player_cash -= 750; //Fee to clear out the gangs
+			global.enemy_threat += 15; //The government doesn't like the violence
+			global.story_phase = StoryPhase.UndergroundWar;
+		}
+	},
+	
+	//Phase 3: Underground war 50% ownership
+	ownership_50:{
+		title:"!!!WATER CONTAMINATION!!!",
+		text: "Reports indicate that several of our buildings are unable to access clean water! It will cost a lot of resources to get things back to normal. Make sure you've repaired all effected buildings.",
+		effect: function(){
+			global.player_cash -= 2000;
+			global.story_phase = StoryPhase.EndGame;
+		}
+	},
+	//Phase: Homebase attack
+	homebase_siege:{
+		title:"!!! BASE UNDER ATTACK !!!",
+		text: "Dear Leader! They've hit our base! You've got to do something or we'll lose everything.",
+		effect: function(){
+			if(instance_exists(global.homebase_instance)){
+					building_shake(global.homebase_instance, 15, 60);
+			}
+			
+			global.enemy_threat -= 70; // This should reduce the enemy threat a lot
+		}
+	
+	
+	},
+	
+	
+	//Unlocking East Side
+	east_side_unlocked: {
+		title: "Stay Out Of The East (UNIT COST INCREASE)",
+		text:"Although you haven't broken any laws, the residents of the east side, have petitioned the Mayor to stop your advance. Claiming that the East Side is Unionized and your faction threatens their economic opportunities",
+		effect: function(){
+			global.enemy_threat += 30;
+			global.story_unit_cost_multiplier = 1.5;
+			
+		}
+	},
+	
+	
+	//Phase: Martial Law 95% owned
+	martial_law:{
+		title: "MARTIAL LAW DECLARED",
+		text: "The Mayor has declared a state of emergency. The President of the United States is sending in the national guard. It's a race to the finish line. Hurry up and buy the rest of the city!",
+		effect: function(){
+			global.threat_check_rate = 300;
+			global.story_phase = StoryPhase.EndGame;
+		}
+	}
+	
+};
+
 
 
 

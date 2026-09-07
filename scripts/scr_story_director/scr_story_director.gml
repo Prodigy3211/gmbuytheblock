@@ -1,3 +1,39 @@
+function story_director_tick(){
+	//Check once a second
+	if(global.game_tick % 60 != 0) return;
+	
+	//Exit if story card is open
+	if(global.story_active == true) return;
+	
+	//Machine checking for progress milestones
+	switch(global.story_phase){
+	
+		case StoryPhase.RisingThreat:
+			if(global.city_owned_percent >= 25 && !global.triggered_ownership_25){
+				global.triggered_ownership_25 = true// locks this element
+				trigger_story_event(global.story_database.ownership_25);
+			}
+			if(global.homebase_instance.building_health <=40 && !global.triggered_homebase_siege){
+				global.triggered_homebase_siege = true;
+				trigger_story_event(global.story_database.homebase_siege);
+			}
+			break;
+		case StoryPhase.UndergroundWar:
+		if(global.city_owned_percent >=50 && !global.triggered_ownership_50){
+			global.triggered_ownership_50 = true;
+			trigger_story_event(global.story_database.ownership_50);
+		}
+		break;
+		case StoryPhase.EndGame:
+		if(global.city_owned_percent >= 95 && !global.triggered_final_lockdown){
+			global.triggered_final_lockdown = true;
+			trigger_story_event(global.story_database.martial_law);
+		}
+		break;		
+	}
+	
+}
+
 //Pauses active systems and loads narrative overlay card
 
 function trigger_story_event(_event_struct){

@@ -1,3 +1,5 @@
+global.game_tick +=1;
+
 //Start up Instructions!
 if (show_instructions == true) {
 	//If player clicks the mouse, dismiss the guide
@@ -104,6 +106,9 @@ if(global.selected_building == noone) {
 					global.player_cash -= cash_cost;
 					
 					district_data.unlocked = true
+					if(inst.building_district == "East Side"){
+						trigger_story_event(global.story_database.east_side_unlocked);
+					}
 					
 					audio_play_sound(snd_unlock, 15, false);
 					
@@ -136,6 +141,13 @@ if(global.selected_building == noone) {
 				if (global.player_cash >= local_purchase_price){
 						global.player_cash -= local_purchase_price;
 						inst.is_owned_by_player= true;
+						
+						//force alarm 0 to check amount of buildings
+						if(instance_exists(obj_game_manager)){
+							with(obj_game_manager){
+								event_perform(ev_alarm, 0);
+							}
+						}
 						inst.image_blend = inst.owned_building_color;
 						
 						//Building shake
@@ -151,7 +163,7 @@ if(global.selected_building == noone) {
 						//Use a Struct to create the event
 						var fist_contact_event = {
 							title: "!!MESSAGE FROM THE MAYOR!!",
-							text: "Attention Citizen: My Office has taken notice of your recent purchases on the west side. I'm not sure how you got the money to do this, but it all looks legal... for now. \\nYour assets Have been logged. The city will reclaim any building that you don't maintain.",
+							text: "Attention Citizen: My Office has taken notice of your recent purchases on the west side. I'm not sure how you got the money to do this, but it all looks legal... for now. Your assets Have been logged. The city will reclaim any building that you don't maintain.",
 							effect: function(){
 								//Immediate gameplay Consequence
 								global.enemy_threat += 25;
@@ -197,6 +209,10 @@ if(mouse_check_button_pressed(mb_left)) {
 	}
 
 }
+
+
+story_director_tick();
+story_director_update();
 
 
 
