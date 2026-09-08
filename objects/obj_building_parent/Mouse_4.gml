@@ -1,3 +1,22 @@
+//Protection from clicking buildings beneath "Buy" or Other UI
+var gui_mx = device_mouse_x_to_gui(0);
+var gui_my = device_mouse_y_to_gui(0);
+
+//check if building is selected and mouse is over the inspection panel
+if (global.selected_building != noone) {
+	var ui_x1 = display_get_gui_width() - 320;
+	var ui_y1 = display_get_gui_height() - 220;
+	if(gui_mx >= ui_x1 && gui_my >= ui_y1)exit;
+	
+}
+
+//blocks the clicks in resource tracking panel
+if(gui_mx >= 10 && gui_mx <= 320 && gui_my >= 10 && gui_my <= 135) {
+	exit;
+}
+
+
+
 //Click a building for Global UI window
 global.selected_building = id;
 show_debug_message("Selected building ID: "+ string(id));

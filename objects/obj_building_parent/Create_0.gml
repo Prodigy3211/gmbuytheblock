@@ -23,6 +23,10 @@ is_player_base = false;
 building_district = component_get_zone_by_coordinates(x, y); //get coordinates of the building to assign zone
 alert_bob_timer = 0; //Animate Floating exclamation mark icon
 component_update_building_visuals(id);
+shake_remain = 0;
+shake_decay = 0.5;
+shake_x_offset = 0;
+shake_y_offset = 0;
 
 
 //Set cost based on object name
@@ -35,6 +39,7 @@ switch(object_index){
 		building_level = 1;
 		owned_building_color = c_silver;
 		income_amount = 2;
+		global.homebase_instance = id;
 		
 		recruiter_count = 0; //Recruiter Unit can be bought at Player Base
 		recruiter_cost = 250;

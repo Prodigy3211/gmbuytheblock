@@ -10,3 +10,17 @@ target_scale_y = lerp(target_scale_y, base_height_scale, 0.1);
 
 //Increment timer for bouncing animation for alert indicator
 alert_bob_timer += 0.05;
+
+
+//Building shake Math
+if(shake_remain > 0){
+	//Offset for THIS frame
+	shake_x_offset = random_range(-shake_remain, shake_remain);
+	shake_y_offset = random_range(-shake_remain, shake_remain);
+	
+	//Decay the shake intensity
+	shake_remain = max(0, shake_remain - shake_decay)
+} else {
+	shake_x_offset = 0;
+	shake_y_offset = 0;
+}

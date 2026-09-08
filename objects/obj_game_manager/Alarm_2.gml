@@ -41,6 +41,15 @@ if (random(100) <= final_threat_chance) {
 		//Script call damage all selected buildings to 15% health in one command
 		component_damage_targets(victims, 15, display_msg, c_red);
 		
+		//shake Building on Damage
+		var total_victims = ds_list_size(victims);
+		var shake_amount = (raid_intensity >= 4) ? 14 : 8  //Max intensity has a bigger shake for the building
+		
+		for (var i = 0; i < total_victims; i++) {
+			var current_victim = ds_list_find_value(victims, i);
+			building_shake(current_victim, shake_amount, 30);
+		}
+		
 		audio_play_sound(snd_disaster, 12, false);
 		
 		//Reduce threat level
@@ -51,7 +60,7 @@ if (random(100) <= final_threat_chance) {
 	ds_list_destroy(victims);
 	
 } else {
-	
+	//Building defense
 	if(global.enemy_threat > 0 && random(100) > final_threat_chance && global.garrison_units > 0) {
 	//Script call Grab a safe building
 	var safe_spot = component_get_random_player_targets(1);
@@ -62,6 +71,7 @@ if (random(100) <= final_threat_chance) {
 		
 		//script call pass the current health so that it spawns the text without being damanged
 		component_damage_targets(safe_spot, picked_instance.building_health, "RAID INTERCEPT", c_aqua)
+		building_shake(picked_instance, 3, 15);
 		
 		audio_play_sound(snd_defender, 10 , false);
 		

@@ -153,10 +153,20 @@ function component_get_district_unlock_cost(_district_name) {
 	return 0;
 }
 
+//Get cash unlock costs from Global struct
+function component_get_district_unlock_cash_cost(_district_name){
+	if(variable_struct_exists(global.districts, _district_name)){
+		var district_data = variable_struct_get(global.districts, _district_name);
+		return district_data.cash_cost;
+	}
+	return 0;
+}
+
 //Does player have enough influence??
 function component_can_afford_district_unlock(_district_name){
 	var target_cost = component_get_district_unlock_cost(_district_name);
-	return (global.player_influence >= target_cost);
+	var target_cash_cost = component_get_district_unlock_cash_cost(_district_name);
+	return (global.player_influence >= target_cost && global.player_cash >= target_cash_cost);
 	
 }
 
@@ -267,5 +277,4 @@ function component_calculate_building_purchase_cost(_base_cost, _district_name){
 	//muliply and filter through a floor for whole numbers
 	return floor(_base_cost * cost_multiplier);
 }
-
 
