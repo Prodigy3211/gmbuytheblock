@@ -1,5 +1,6 @@
 global.game_tick +=1;
 
+
 //Start up Instructions!
 if (show_instructions == true) {
 	//If player clicks the mouse, dismiss the guide
@@ -17,25 +18,51 @@ if(global.story_active == true){
 }
 
 
+//Mobile Phone touch screen
+if(device_mouse_check_button_pressed(0, mb_left)) {
+	//Store starting position of the drag
+	global.drag_start_x = window_mouse_get_x();
+	global.drag_start_y = window_mouse_get_y();
+	global.drag_cam_start_x = global.cam_x;
+	global.drag_cam_start_y = global.cam_y;
+}
+
+//check if they are hoding down and dragging finger
+if(device_mouse_check_button(0, mb_left)){
+	//exit if they are clicking a menu item
+	if(global.story_active == true) return;
+	
+	//Calculate where the finger has moved from start
+	var current_touch_x = window_mouse_get_x();
+	var current_touch_y = window_mouse_get_y();
+	
+	var distance_dragged_x = current_touch_x - global.drag_start_x;
+	var distance_dragged_y = current_touch_y - global.drag_start_y;
+	
+	//change camera based on finger direction (for natural feelings)
+	global.cam_x = global.drag_cam_start_x - distance_dragged_x;
+	global.cam_y = global.drag_cam_start_y - distance_dragged_y;
+}
+
 
 // Keyboard Map navigation
 
 //Move speed
 var base_speed = 12;
-var scroll_speed_x = base_speed * 2.0; //for wide frame axis
+var scroll_speed_x = base_speed * 1.8; //for wide frame axis
 var scroll_speed_y = base_speed;
 
 //Input keys
-var move_left = keyboard_check(vk_left) || keyboard_check(ord("A")) global.cam_y -= scroll_speed_y;
-var move_right = keyboard_check(vk_right) || keyboard_check(ord("D"))global.cam_y += scroll_speed_y;
-var move_up = keyboard_check(vk_up) || keyboard_check(ord("W"))global.cam_x -= scroll_speed_x;
-var move_down = keyboard_check(vk_down) || keyboard_check(ord("S"))global.cam_x += scroll_speed_x;
+var move_left = keyboard_check(vk_left) || keyboard_check(ord("A")); 
+var move_right = keyboard_check(vk_right) || keyboard_check(ord("D"));
+var move_up = keyboard_check(vk_up) || keyboard_check(ord("W"));
+var move_down = keyboard_check(vk_down) || keyboard_check(ord("S"));
 
 // Change Camera target position based on which keys are held
-if (move_left) global.cam_x -= cam_speed;
-if (move_right) global.cam_x += cam_speed;
-if (move_up) global.cam_y -= cam_speed;
-if (move_down) global.cam_y += cam_speed;
+if (move_left) global.cam_x -= scroll_speed_x;
+if (move_right) global.cam_x += scroll_speed_x;
+if (move_up) global.cam_y -= scroll_speed_y;
+if (move_down) global.cam_y += scroll_speed_y;
 
 var max_scroll_x = max(0, room_width - 1366);
 var max_scroll_y = max(0, room_height - 768);

@@ -11,6 +11,12 @@ global.net_cash_tick = 0;
 global.net_influence_tick = 0;
 global.garrison_units= 0; //Starting defenders
 
+//camera tracking for mobile
+global.drag_start_x = 0;
+global.drag_start_y = 0;
+global.drag_cam_start_x = 0;
+global.drag_cam_start_y = 0;
+
 
 //Nrrative State Tracker
 enum StoryPhase {
