@@ -18,6 +18,33 @@ if(global.story_active == true){
 }
 
 
+//Zoom Logic! Pinch and Mouse Wheel
+if(!variable_instance_exists(id,"cam_zoom")){
+	cam_zoom = 1.0;
+	zoom_target = 1.0;
+	zoom_speed = 0.1;
+	zoom_min = 0.5; //zoomed out
+	zoom_max = 1.5; // zoomed in close
+}
+
+//capture inputs from mouse or pinching
+if(mouse_wheel_up()) zoom_target = clamp(zoom_target - 0.1, zoom_min, zoom_max);
+if(mouse_wheel_down()) zoom_target = clamp(zoom_target + 0.1, zoom_min, zoom_max);
+
+//Smooth movemnt to zoom level
+cam_zoom = lerp(cam_zoom, zoom_target, zoom_speed);
+
+//Rezie camera view dynamically
+
+var new_w = 1366 * cam_zoom;
+var new_h = 768 * cam_zoom;
+camera_set_view_size(view_camera[0], new_w, new_h);
+
+//update max scroll limits
+var max_scroll_x = max(0, room_width - new_w);
+var max_scroll_y = max(0, room_height - new_h);
+
+
 //Mobile Phone touch screen
 if(device_mouse_check_button_pressed(0, mb_left)) {
 	//Store starting position of the drag
