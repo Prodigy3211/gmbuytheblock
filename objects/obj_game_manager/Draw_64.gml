@@ -42,7 +42,7 @@ if(show_instructions == true) {
 	exit;
 }
 
-//Story Card Draw!
+//Story Card Draw!e
 
 if(global.story_active == true && global.active_story_struct != noone){
 	var current_event = global.active_story_struct;
@@ -325,6 +325,18 @@ draw_text(210, 121, "Government Threat: " +string(floor(global.enemy_threat)) + 
 	}
  
 	
+//Tooltips/ OBJECTIVE TRACKER
+if(global.player_cash < 1500 && global.city_owned_percent <= 5 ){
+	draw_objective_banner("Buy a building or two to get things moving in terms of cash flow", c_green);
+} else if(global.enemy_threat > 45){
+	draw_objective_banner("HIGH THREAT LEVEL DETECTED! Hire defenders at your homebase to help mitigate attacks", c_red);
+}else if(global.player_cash >=1000 && global.player_influence >= 175){
+	draw_objective_banner("You've got enough to unlock Downtown! click on any building in downtown and unlock the entire neighborhood from there!", c_yellow);
+}else{
+	draw_objective_banner("Buy buildings, Generate CASH and watch out for GOVERNMENT attacks.", c_gray);
+}
+
+
 
 	
 	//beroom
