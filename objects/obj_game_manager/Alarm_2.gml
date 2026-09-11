@@ -1,5 +1,5 @@
 // Instructions check
-if(show_instructions = true){
+if(show_instructions == true){
 	//resets clock until player leaves instructions screen
 alarm[2] = global.threat_check_rate;
 exit;
@@ -78,7 +78,7 @@ if (random(100) <= final_threat_chance) {
 	}
 	
 	ds_list_destroy(safe_spot);
-}
+	}
 
 }
 

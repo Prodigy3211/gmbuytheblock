@@ -12,6 +12,20 @@ if(game_over_state == "win" || game_over_state = "lose"){
 	show_instructions = true;
 	global.player_population_max = 5;
 	game_over_state = "playing";
+	global.story_phase = StoryPhase.Intro;
+	global.story_active = false;
+	global.active_story_struct = noone;
+	global.story_unit_cost_multiplier = 1.0;
+	
+	global.triggered_homebase_siege = false;
+	global.triggered_ownership_25 = false;
+	global.triggered_final_lockdown = false;
+	global.triggered_ownership_50 = false;
+	
+	global.net_cash_tick = 0;
+	global.net_influence_tick = 0;
+	
+	global.game_tick = 0;
 	
 	//Reset Sectors
 	global.districts = {

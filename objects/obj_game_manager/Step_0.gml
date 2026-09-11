@@ -1,13 +1,22 @@
+if(keyboard_check_pressed(vk_escape)){
+	if(!instance_exists(obj_pause_menu)){
+	instance_deactivate_all(true);
+	instance_create_layer(0, 0, "Instances", obj_pause_menu);
+	}
+}
+
+
 global.game_tick +=1;
+
+
 
 
 //Start up Instructions!
 if (show_instructions == true) {
 	//If player clicks the mouse, dismiss the guide
-	if(mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_space)) { 
+	if(device_mouse_check_button_pressed(0 , mb_left) || keyboard_check_pressed(vk_space)) { 
 			show_instructions = false;
 		}
-		
 		//freeze all background operations so game doesn't start early
 		exit;
 }
@@ -78,7 +87,7 @@ if(global.story_active == true){
 
 
 // Keyboard Map navigation
-
+if(!instance_exists(obj_pause_menu)){
 //Move speed
 var base_speed = 12;
 var scroll_speed_x = base_speed * 1.8; //for wide frame axis
@@ -95,7 +104,7 @@ if (move_left) global.cam_x -= scroll_speed_x;
 if (move_right) global.cam_x += scroll_speed_x;
 if (move_up) global.cam_y -= scroll_speed_y;
 if (move_down) global.cam_y += scroll_speed_y;
-
+ }
 }
 
 // Get the Screen size

@@ -32,6 +32,30 @@ var gui_m_y = device_mouse_y_to_gui(0);
 //Is mouse hovering over button?
 var is_hovering = (gui_m_x >= btn_x1 && gui_m_x <= btn_x2 && gui_m_y >= btn_y1 && gui_m_y <= btn_y2);
 
+// Room transition to game room
+
+if(device_mouse_check_button_pressed(0, mb_left)){
+	
+	
+	if (is_hovering){
+	
+		//Play the purchase sound effect
+		audio_play_sound(snd_unlock, 10, false);
+		
+		
+		//place room asset name for gameplay
+		room_goto(Room1);
+		
+		//Clean up formatting
+		draw_set_halign(fa_left);
+		draw_set_valign(fa_top);
+		
+		//Destroy this object so it doesnt leak
+		instance_destroy();
+		exit;
+	}
+}
+
 //Button background shape
 draw_set_color(is_hovering ? c_white : c_gray);
 draw_rectangle(btn_x1, btn_y1, btn_x2, btn_y2, false);

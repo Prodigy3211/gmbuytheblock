@@ -200,7 +200,7 @@ cam_speed = 10;
 //Enemy Threat Level!
 
 global.enemy_threat = 0;
-global.threat_check_rate = 600; //Checks for a Raid every 10 seconds
+global.threat_check_rate = 1800; //Checks for a Raid every 30 seconds
 alarm[2] = global.threat_check_rate; //Alarm 2 is now our enemy Director
 
 //instructions

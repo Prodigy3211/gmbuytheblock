@@ -103,7 +103,7 @@ var final_cash_payout = ceil(total_building_cash * financial_multiplier);
 
 global.player_cash += final_cash_payout;
 
-var baseline_homebase_cap = 10;
+var baseline_homebase_cap = 5;
 global.player_population_max = baseline_homebase_cap + total_cap_bonus;
 
 var population_influence_bonus = floor(global.player_population_max * 0.5);
