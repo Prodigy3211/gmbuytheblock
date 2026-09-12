@@ -117,13 +117,14 @@ draw_set_valign(fa_top);
 //Draw a dark background box for readability
 
 draw_set_colour(c_black);
-draw_alpha= 0.5;
-draw_rectangle(10,10,320,130,false); //Background big enough to have cash and progress bar
+draw_set_alpha(0.5);
+draw_rectangle(10,10,320,140,false); //Background big enough to have cash and progress bar
 
 //Draw the cash text in green
 draw_set_alpha(1.0);
 draw_set_colour(c_lime);
-var cash_str = "Cash: $" +string(global.player_cash) + " (+$" + string(global.net_cash_tick) + ")";
+var live_income = component_calculate_master_payout();
+var cash_str = "Cash: $" +string(global.player_cash) + " (+$" + string(live_income) + ")";
 draw_text_transformed(20,18,cash_str, hud_cash_scale,hud_cash_scale, 0);
 
 //Draw the Population Tracker
@@ -330,8 +331,8 @@ if(global.player_cash < 1500 && global.city_owned_percent <= 5 ){
 	draw_objective_banner("Buy a building or two to get things moving in terms of cash flow", c_green);
 } else if(global.enemy_threat > 45){
 	draw_objective_banner("HIGH THREAT LEVEL DETECTED! Hire defenders at your homebase to help mitigate attacks", c_red);
-}else if(global.player_cash >=1000 && global.player_influence >= 175){
-	draw_objective_banner("You've got enough to unlock Downtown! click on any building in downtown and unlock the entire neighborhood from there!", c_yellow);
+}else if(global.player_cash >=1000 && global.player_influence >= 500){
+	draw_objective_banner("Use Influence to Unlock New districts!", c_yellow);
 }else{
 	draw_objective_banner("Buy buildings, Generate CASH and watch out for GOVERNMENT attacks.", c_gray);
 }
@@ -367,13 +368,62 @@ if(game_over_state != "playing") {
 	
 	if(game_over_state == "win") {
 		draw_set_colour(c_lime);
-		draw_text(screen_cx, screen_cy - 20, "VICTORY!");
+		draw_text_transformed(screen_cx, screen_cy - 180, "VICTORY!", 1.5, 1.5, 0);
 		draw_set_colour(c_white);
-		draw_text(screen_cx, screen_cy + 20, "You successfully own this bitch! Press 'R' to restart.");
+		draw_text(screen_cx, screen_cy - 140, "You successfully own this bitch! Press 'R' to restart.");
 	} else if (game_over_state == "lose") {
 		draw_set_colour(c_red);
-		draw_text(screen_cx, screen_cy - 20, "You lost our Headquarters!? You SUCK!");
+		draw_text_transformed(screen_cx, screen_cy - 180, "You lost our Headquarters!? You SUCK!", 1.3, 1.3, 0);
 		draw_set_colour(c_white);
-		draw_text(screen_cx, screen_cy + 20, "The city has frozen your assets and reclaimed your property. Press 'R' to Try again.");
+		draw_text(screen_cx, screen_cy - 140, "The city has frozen your assets and reclaimed your property.");
 	}
+	//statistics box
+	var panel_w = 460;
+	var panel_h = 190;
+	var start_y = screen_cy - 80;
+	var line_height = 28;
+	
+	draw_set_color(c_black);
+	draw_set_alpha(0.6);
+	draw_roundrect_ext(screen_cx - (panel_w /2), start_y - 10, screen_cx + (panel_w / 2), start_y + panel_h, 8, 8, false);
+	draw_set_color(game_over_state == "win" ? c_lime : c_red);
+	draw_roundrect_ext(screen_cx - (panel_w /2), start_y - 10, screen_cx + (panel_w / 2), start_y + panel_h, 8, 8, true);
+	
+	//data struct
+	draw_set_alpha(1.0);
+	var stats_report = [
+		{label: "FINAL CASH", val: "$" + string(global.player_cash)},
+		{label: "FACTION INFLUENCE", val: string(global.player_influence)},
+		{label: "POPULATION ASSIGNMENT", val: string(global.player_population) + "/" + string(global.player_population_max)},
+		{label: "TOTAL TIME TO WIN", val: string(round(global.game_tick / 60)) + " Seconds"}
+	
+	];
+	
+	//Render Grid rows for data
+	for (var i = 0; i < array_length(stats_report); i++) {
+		var row_y = start_y + 20 + (i * line_height);
+		
+		//left side categories
+		draw_set_halign(fa_left);
+		draw_set_color(c_gray);
+		draw_text(screen_cx - (panel_w / 2) + 20, row_y, stats_report[i].label);
+		
+		//right side values
+		draw_set_halign(fa_right);
+		draw_set_colour(c_white);
+		draw_text(screen_cx + (panel_w / 2) - 20, row_y, stats_report[i].val);
+	}
+	
+	//Navigation instructions for footer prompt
+	draw_set_halign(fa_center);
+	draw_set_color(c_yellow);
+	var prompt_text = (game_over_state == "win") ? "[ Press 'R' to Restart || Pres 'Q' to Quit ]" : "[Press 'R' to Try Again || Press 'Q' to Quit]";
+	draw_text(screen_cx, start_y + panel_h + 35, prompt_text);
+	
+	//Safe reset
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
+	draw_set_color(c_white);
+	
+	
 }

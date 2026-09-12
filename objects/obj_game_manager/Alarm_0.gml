@@ -5,6 +5,15 @@ alarm[0] = payout_rate;
 exit;
 }
 
+
+//Modular payout
+var dynamic_payout = component_calculate_master_payout();
+
+global.player_cash += dynamic_payout;
+global.net_cash_tick = dynamic_payout;
+
+alarm[0] = global.payout_check_rate;
+
 //Track Population cap
 var base_cap = 0; //Base population cap due to Home Base
 var total_cap_bonus= 0; //To allow buildings to increase the max population

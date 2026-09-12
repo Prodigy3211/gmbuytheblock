@@ -25,7 +25,7 @@ function story_director_tick(){
 		}
 		break;
 		case StoryPhase.EndGame:
-		if(global.city_owned_percent >= 95 && !global.triggered_final_lockdown){
+		if(global.city_owned_percent >= 80 && !global.triggered_final_lockdown){
 			global.triggered_final_lockdown = true;
 			trigger_story_event(global.story_database.martial_law);
 		}

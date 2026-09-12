@@ -264,7 +264,7 @@ function component_get_sector_cost_multiplier(_district_name) {
 		case "East Side": return 1.30;
 		case "Uptown": return 1.80;
 		case "Capitol Hill": return 2.50; //Most expesive buildings
-		default:
+		default: return 1.00;
 	}
 
 }

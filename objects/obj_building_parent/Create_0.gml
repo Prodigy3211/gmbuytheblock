@@ -93,7 +93,8 @@ switch(object_index){
 					function(_inst) { 
 						var u_data = variable_struct_get(global.faction_units, "defender");
 						var current_price = (u_data != undefined) ? u_data.cash_cost : 300;
-						return (global.player_cash >= 300 && global.player_population < global.player_population_max); }
+						return (global.player_cash >= current_price && global.player_population < global.player_population_max); 
+						}
 				),
 				new scr_UIButton("SPY",
 					function(_inst) { purchase_faction_unit("spy", _inst); },
@@ -117,30 +118,38 @@ switch(object_index){
 		
 		break;
 	case obj_residence:
-		building_cost=250;
-		income_amount= 5; //5 dollars per tick
+		building_cost=200;
+		income_amount= 8; //5 dollars per tick
 		population_cap_bonus = 3; // Increases Population Cap by X
 		owned_building_color = c_lime;
+		repair_cost = 45;
+		upgrade_cost = 100;
 		break;
 	case obj_commercial:
-		building_cost=1500;
-		income_amount= 50; //45 dollars per tick
+		building_cost=1200;
+		income_amount= 30; //30 dollars per tick
 		influence_generation = 2;
 		owned_building_color = c_aqua;
+		repair_cost = 250;
+		upgrade_cost = 500;
 		break;
 	case obj_factory:
-		building_cost=5000;
-		income_amount= 350; //350 dollars per tick
+		building_cost=4500;
+		income_amount= 110; //90 dollars per tick
 		influence_generation = 8;
+		repair_cost = 800;
 		owned_building_color = c_orange;
+		upgrade_cost = 1500;
 		break;
 	case obj_temple:
 		building_cost=15000;
-		population_generation = 1;
+		//population_generation = 1;
 		owned_building_color = c_green;
-		income_amount = 1000; // Need to update this to a percentage of the population
+		income_amount = 260; // Need to update this to a percentage of the population
 		//to simulate a 10% tithe.
 		influence_generation = 15;
+		repair_cost = 2000;
+		upgrade_cost = 4000;
 		break;
 }
 
@@ -152,9 +161,12 @@ if (is_player_base == false){
 					function(_inst) {
 						global.player_cash -= _inst.upgrade_cost;
 						_inst.building_level += 1;
+						
 						//Should update the sprite upon upgrade
 						component_update_building_visuals(id);
-						_inst.income_amount += 20;
+						
+						//Increase income amount by 40%
+						_inst.income_amount = round(_inst.income_amount * 1.4);
 						_inst.upgrade_cost *= 2;
 						audio_play_sound(snd_upgrade, 10,false);
 				},

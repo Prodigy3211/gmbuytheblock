@@ -4,6 +4,8 @@ global.player_population_max= 5; //Max Population
 global.player_population = 0; //Total Population
 global.player_influence = 0; //spent on policies
 global.homebase_instance = noone; // Player base pointer
+global.payout_check_rate = 300;
+alarm[0] = global.payout_check_rate;
 
 global.selected_building = noone; //ensures that no building is selected as default
 global.city_owned_percent = 0;
@@ -90,7 +92,7 @@ global.story_database = {
 	//Phase:CIA Drug Dispense(Triggered by 25% buy out)
 	ownership_25:{
 		title:"!!! OPEN DRUG MARKET !!!",
-		text:"Reports indicate that strange black vans have appeared throughout our neighborhoods, Green Magic makes your day a little less stressful! We've got to do something about these drug dealers.",
+		text:"Reports indicate that strange black vans have appeared throughout our neighborhoods, Green Magic makes your day a little less stressful! We've got to do something about these drug dealers. -$750",
 		effect: function(){
 			global.player_cash -= 750; //Fee to clear out the gangs
 			global.enemy_threat += 15; //The government doesn't like the violence
@@ -101,7 +103,7 @@ global.story_database = {
 	//Phase 3: Underground war 50% ownership
 	ownership_50:{
 		title:"!!!WATER CONTAMINATION!!!",
-		text: "Reports indicate that several of our buildings are unable to access clean water! It will cost a lot of resources to get things back to normal. Make sure you've repaired all effected buildings.",
+		text: "Reports indicate that several of our buildings are unable to access clean water! It will cost a lot of resources to get things back to normal. Make sure you've repaired all effected buildings. -$2,000",
 		effect: function(){
 			global.player_cash -= 2000;
 			global.story_phase = StoryPhase.EndGame;
@@ -138,12 +140,12 @@ global.story_database = {
 	},
 	
 	
-	//Phase: Martial Law 95% owned
+	//Phase: Martial Law 80% owned
 	martial_law:{
 		title: "MARTIAL LAW DECLARED",
 		text: "The Mayor has declared a state of emergency. The President of the United States is sending in the national guard. It's a race to the finish line. Hurry up and buy the rest of the city!",
 		effect: function(){
-			global.threat_check_rate = 300;
+			global.threat_check_rate = 400;
 			global.story_phase = StoryPhase.EndGame;
 		}
 	}
@@ -155,12 +157,12 @@ global.story_database = {
 
 //Payout timer (60 frames = 1 second at 60fps. 30 frames = 1secone at 30fps)
 
-payout_rate = 180;
+payout_rate = 300;
 alarm[0] = payout_rate;
 
 
-//random event every 10 seconds
-alarm[1] = 600;
+//random event every 45 seconds
+alarm[1] = 2700;
 
 //Win or Lose
 game_over_state = "playing"; //can switch to win or lose
@@ -200,7 +202,7 @@ cam_speed = 10;
 //Enemy Threat Level!
 
 global.enemy_threat = 0;
-global.threat_check_rate = 1800; //Checks for a Raid every 30 seconds
+global.threat_check_rate = 900; //Checks for a Raid every 15 seconds
 alarm[2] = global.threat_check_rate; //Alarm 2 is now our enemy Director
 
 //instructions
