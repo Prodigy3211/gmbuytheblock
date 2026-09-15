@@ -1,3 +1,10 @@
+//pause menu
+if(instance_exists(obj_pause_menu)){
+	alarm[0] = 1;
+	exit;
+}
+
+
 // Instructions check
 if(show_instructions = true){
 	//resets clock until player leaves instructions screen
@@ -7,12 +14,12 @@ exit;
 
 
 //Modular payout
-var dynamic_payout = component_calculate_master_payout();
+//var dynamic_payout = component_calculate_master_payout();
 
-global.player_cash += dynamic_payout;
-global.net_cash_tick = dynamic_payout;
+//global.player_cash += dynamic_payout;
+//global.net_cash_tick = dynamic_payout;
 
-alarm[0] = global.payout_check_rate;
+//alarm[0] = global.payout_check_rate;
 
 //Track Population cap
 var base_cap = 0; //Base population cap due to Home Base
@@ -97,9 +104,11 @@ with (obj_building_parent) {
 	
 		
 		//Green Income text for each tick
+		if(dynamic_income > 0){
 			var txt = instance_create_layer(x, y - 20, "Instances", obj_floating_text);
 			txt.text = "+$" + string(dynamic_income);
 			txt.text_color = c_lime; //green for profit!
+		}
 	}
 
 }
@@ -110,31 +119,45 @@ with (obj_building_parent) {
 var financial_multiplier = component_get_financial_multiplier();
 var final_cash_payout = ceil(total_building_cash * financial_multiplier);
 
-global.player_cash += final_cash_payout;
+
+
 
 var baseline_homebase_cap = 5;
 global.player_population_max = baseline_homebase_cap + total_cap_bonus;
 
-var population_influence_bonus = floor(global.player_population_max * 0.5);
-var final_influence_tick = total_building_influence + population_influence_bonus;
+//var population_influence_bonus = floor(global.player_population_max * 0.5);
+var final_influence_tick = total_building_influence;
 
-global.player_influence += final_influence_tick;
 
+
+//global.player_influence += final_influence_tick;
+
+
+
+if(!instance_exists(obj_pause_menu) && show_instructions == false){
+	global.player_cash += final_cash_payout;
+	global.player_influence += final_influence_tick;
+	
 //Save global tickers for dashboard
 global.net_cash_tick = final_cash_payout;
 global.net_influence_tick = final_influence_tick;
 
-//Track visual notification ticks if you own bookies
-if (financial_multiplier > 1.0 && total_building_cash > 0) {
-	global.hud_bookie_bonus = final_cash_payout - total_building_cash;
-	global.hud_bonus_timer = 90;
+} else {
+	global.net_cash_tick = 0;
+	global.net_influence_tick = 0;
 }
 
-if (final_influence_tick > 0) {
-	var txt = instance_create_layer(150, 70, "Instances", obj_floating_text);
-	txt.text = "+" + string(final_influence_tick) + "Inf";
-	txt.text_colour = c_purple;
-}
+//Track visual notification ticks if you own bookies
+//if (financial_multiplier > 1.0 && total_building_cash > 0) {
+//	global.hud_bookie_bonus = final_cash_payout - total_building_cash;
+//	global.hud_bonus_timer = 90;
+//}
+
+//if (final_influence_tick > 0) {
+//	var txt = instance_create_layer(150, 70, "Instances", obj_floating_text);
+//	txt.text = "+" + string(final_influence_tick) + "Inf";
+//	txt.text_colour = c_purple;
+//}
 
 
 //Accountant Logic
@@ -181,7 +204,7 @@ with(obj_player_base) {
 		
 		//Major flashing alert
 		var txt = instance_create_layer(x, y -20, "Instances", obj_floating_text);
-		txt.text = "HEADQUARTER DESTROYED";
+		txt.text = "HEADQUARTERS DESTROYED";
 		txt.text_color = c_red;
 	}
 }

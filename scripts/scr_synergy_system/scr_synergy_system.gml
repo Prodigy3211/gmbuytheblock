@@ -36,5 +36,5 @@ function component_calculate_master_payout(){
 	if(uptown_owned >= 3) synergy_bonus += (west_owned - 2) * 0.15;
 	if(capitol_owned >= 3) synergy_bonus += (west_owned - 2) * 0.15;
 	
-	return round(raw_payout * synergy_bonus);
+	return ceil(raw_payout * synergy_bonus);
 }

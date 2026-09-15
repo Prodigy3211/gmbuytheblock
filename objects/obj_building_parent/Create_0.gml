@@ -38,7 +38,7 @@ switch(object_index){
 		building_cost = 0;
 		building_level = 1;
 		owned_building_color = c_silver;
-		income_amount = 2;
+		income_amount = 0;
 		global.homebase_instance = id;
 		
 		recruiter_count = 0; //Recruiter Unit can be bought at Player Base

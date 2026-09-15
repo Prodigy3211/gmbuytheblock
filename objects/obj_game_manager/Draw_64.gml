@@ -110,6 +110,21 @@ if(global.story_active == true && global.active_story_struct != noone){
 
 //RESOURCE TRACKING CARD
 
+//Tracking live stats for pause state
+var live_income = 0;
+var live_influence_tick = 0;
+var current_pop_max = global.player_population_max;
+
+if(!instance_exists(obj_pause_menu)){
+	live_income = component_calculate_master_payout();
+	live_influence_tick = global.net_influence_tick;
+} else {
+	//If Pause read the last telementry data for resoucrs
+	live_income = global.net_cash_tick;
+	live_influence_tick = 0; // Freeze the text
+}
+
+
 //text alignment and size
 draw_set_halign(fa_left);
 draw_set_valign(fa_top);
@@ -123,17 +138,17 @@ draw_rectangle(10,10,320,140,false); //Background big enough to have cash and pr
 //Draw the cash text in green
 draw_set_alpha(1.0);
 draw_set_colour(c_lime);
-var live_income = component_calculate_master_payout();
+//var live_income = component_calculate_master_payout();
 var cash_str = "Cash: $" +string(global.player_cash) + " (+$" + string(live_income) + ")";
 draw_text_transformed(20,18,cash_str, hud_cash_scale,hud_cash_scale, 0);
 
 //Draw the Population Tracker
 draw_set_colour(c_orange);
-draw_text(20, 44, "Population: " + string(global.player_population) + " / " +string(global.player_population_max));
+draw_text(20, 44, "Population: " + string(global.player_population) + " / " +string(current_pop_max));
 
 //Influence Tracker
 draw_set_colour(c_purple);
-var inf_str = "Influence: " + string(global.player_influence) + " (+" + string(global.net_influence_tick) + ")";
+var inf_str = "Influence: " + string(global.player_influence) + " (+" + string(live_influence_tick) + ")";
 draw_text(20,70,inf_str);
 
 

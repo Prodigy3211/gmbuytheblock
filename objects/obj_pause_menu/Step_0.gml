@@ -29,6 +29,10 @@ if(select_key){
 	case 1: //Restart
 		instance_activate_all();
 		
+		show_instructions = true;
+		alarm[0] = 1;
+	
+		
 		//explicitly wipe all the eveonomy states
 		global.player_cash = 1000;
 		global.enemy_threat = 0;
@@ -60,10 +64,8 @@ if(select_key){
 		global.game_tick =0;
 		
 		
+		audio_play_sound(snd_upgrade, 10, false);
 		
-		
-		instance_destroy();
-		room_goto(rm_title_screen);
 		break;
 		
 	//case 2: //Quit

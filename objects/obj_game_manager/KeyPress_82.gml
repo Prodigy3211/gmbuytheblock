@@ -21,7 +21,7 @@ if(game_over_state == "win" || game_over_state = "lose"){
 	global.triggered_ownership_25 = false;
 	global.triggered_final_lockdown = false;
 	global.triggered_ownership_50 = false;
-	
+	global.payout_check_rate = 300;
 	global.net_cash_tick = 0;
 	global.net_influence_tick = 0;
 	

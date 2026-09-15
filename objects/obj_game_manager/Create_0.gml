@@ -4,7 +4,7 @@ global.player_population_max= 5; //Max Population
 global.player_population = 0; //Total Population
 global.player_influence = 0; //spent on policies
 global.homebase_instance = noone; // Player base pointer
-global.payout_check_rate = 300;
+global.payout_check_rate = 250;
 alarm[0] = global.payout_check_rate;
 
 global.selected_building = noone; //ensures that no building is selected as default
