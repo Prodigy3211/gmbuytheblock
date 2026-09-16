@@ -23,7 +23,7 @@ draw_set_color(c_white);
 draw_text_transformed(cx, cy - 50, "GAME PAUSED", 1.5, 1.5, 0);
 
 //Render menu
-var menu_options = ["RESUME", "RESTART"];
+var menu_options = ["RESUME", "RESTART", "QUIT"];
 
 for(var i = 0; i < array_length(menu_options); i++){
 	var text_y = cy + 10 + (i * 45);

@@ -15,7 +15,9 @@ function component_calculate_master_payout(){
 	with (obj_building_parent){
 		if(is_owned_by_player == true && is_player_base == false){
 			var sect_mult = component_get_sector_cash_multiplier(building_district);
-			raw_payout += (income_amount * sect_mult);
+			var scaled_income = income_amount * building_level;
+			
+			raw_payout += (scaled_income * sect_mult);
 			
 			//Tract ownership per sector
 			switch(building_district) {
@@ -31,10 +33,10 @@ function component_calculate_master_payout(){
 	//Calculate district synergy bonus
 	var synergy_bonus = 1.0;
 	if(west_owned >= 3) synergy_bonus += (west_owned - 2) * 0.15;
-	if(downtown_owned >= 3) synergy_bonus += (west_owned - 2) * 0.15;
-	if(east_owned >= 3) synergy_bonus += (west_owned - 2) * 0.15;
-	if(uptown_owned >= 3) synergy_bonus += (west_owned - 2) * 0.15;
-	if(capitol_owned >= 3) synergy_bonus += (west_owned - 2) * 0.15;
+	if(downtown_owned >= 3) synergy_bonus += (downtown_owned - 2) * 0.15;
+	if(east_owned >= 3) synergy_bonus += (east_owned - 2) * 0.15;
+	if(uptown_owned >= 3) synergy_bonus += (uptown_owned - 2) * 0.15;
+	if(capitol_owned >= 3) synergy_bonus += (capitol_owned - 2) * 0.15;
 	
-	return ceil(raw_payout * synergy_bonus);
+	return round(raw_payout * synergy_bonus);
 }

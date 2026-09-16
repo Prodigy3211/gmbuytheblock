@@ -68,13 +68,19 @@ if(select_key){
 		
 		break;
 		
-	//case 2: //Quit
-	//	instance_activate_all();
+	case 2: //Quit
+		instance_activate_all();
 		
-	//	//Clear all objects
-	//	with(obj_building_parent) instance_destroy();
+		//Clear all objects
+		with(obj_building_parent) instance_destroy();
 		
-	
+		global.selected_building = noone;
+		
+		audio_play_sound(snd_unlock, 10, false);
+		
+		room_goto(rm_title_screen);
+		
+		break;
 	
 	}
 }
