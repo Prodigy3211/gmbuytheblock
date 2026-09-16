@@ -9,11 +9,11 @@ draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_y
 
 //If the City Owns it, give it a dark inactive look.
 if (is_owned_by_player == false) {
-	gpu_set_blendmode(bm_subtract);
+	var drab_gray = make_color_rgb(100, 105, 115);
 	//Add dark sillouette
-	draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_yscale, image_angle,c_black, 0.4);
-	gpu_set_blendmode(bm_normal);
+	draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_yscale, image_angle,drab_gray, image_alpha);
 } else {
+	draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_yscale, image_angle,c_white, image_alpha);
 	//Player Owned highlight
 	draw_set_colour(owned_building_color);
 	draw_circle(draw_x, draw_y +(sprite_height/2) - 10, 6, false);

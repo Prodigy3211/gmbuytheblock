@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"temple",
-    "path":"sprites/temple/temple.yy",
+    "name":"spr_temple_base",
+    "path":"sprites/spr_temple_base/spr_temple_base.yy",
   },
   "spriteMaskId":null,
   "visible":true,

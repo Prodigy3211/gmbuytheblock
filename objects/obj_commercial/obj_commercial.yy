@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sprite_commercial",
-    "path":"sprites/sprite_commercial/sprite_commercial.yy",
+    "name":"spr_commercial_base",
+    "path":"sprites/spr_commercial_base/spr_commercial_base.yy",
   },
   "spriteMaskId":null,
   "visible":true,
