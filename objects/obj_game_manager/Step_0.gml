@@ -218,11 +218,11 @@ if(global.selected_building == noone) {
 						inst.is_owned_by_player= true;
 						
 						//force alarm 0 to check amount of buildings
-						if(instance_exists(obj_game_manager)){
-							with(obj_game_manager){
-								event_perform(ev_alarm, 0);
-							}
-						}
+						//if(instance_exists(obj_game_manager)){
+						//	with(obj_game_manager){
+						//		event_perform(ev_alarm, 0);
+						//	}
+						//}
 						inst.image_blend = inst.owned_building_color;
 						
 						//Building shake

@@ -4,8 +4,7 @@ var draw_x = x + (variable_instance_exists(id, "shake_x_offset") ? shake_x_offse
 var draw_y = y + (variable_instance_exists(id, "shake_y_offset") ? shake_y_offset : 0);
 
 
-//Keep buildings clear of tint when owned
-draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_yscale, image_angle, c_white, image_alpha);
+
 
 //If the City Owns it, give it a dark inactive look.
 if (is_owned_by_player == false) {
@@ -30,6 +29,62 @@ if(is_hovered == true) {
 //Sabotage Distress Indicator
 //Only display icon if pplayer owns it and building damaged enough to stop providing resources'
 if (is_owned_by_player == true && building_health <= 30) {
+	
+	if(sin(current_time * 0.003) > 0){
+		//Pulsing Red Warning Tint over building
+		gpu_set_blendmode(bm_add);
+		draw_sprite_ext(sprite_index, image_index, draw_x, draw_y, image_xscale, image_yscale, image_angle, c_red, 0.3);
+		gpu_set_blendmode(bm_normal);
+		
+		//Calucation for full fire animation speed
+		var fire_frame = (current_time /200) % 7;
+		
+		//Building type one: Standard
+		switch(object_index){
+			
+			case obj_residence:
+				draw_sprite(spr_damage_fire, fire_frame, draw_x + 4 , draw_y); //Left side foundation
+				draw_sprite(spr_damage_fire, fire_frame, draw_x + 22, draw_y - 20) // Right side upper level
+				break;
+				
+				case obj_commercial:
+				draw_sprite(spr_damage_fire, fire_frame, draw_x - 12, draw_y); // Doorway
+				draw_sprite(spr_damage_fire, fire_frame, draw_x + 16, draw_y - 32); //Middle window row
+				draw_sprite(spr_damage_fire, fire_frame, draw_x - 8 , draw_y - 64);
+				break;
+			case obj_factory:
+				draw_sprite(spr_damage_fire, fire_frame, draw_x - 40, draw_y) // Left garage door
+				draw_sprite(spr_damage_fire, fire_frame, draw_x + 32, draw_y) // right wall
+				draw_sprite(spr_damage_fire, fire_frame, draw_x - 12, draw_y - 40) // High Window
+				draw_sprite(spr_damage_fire, fire_frame, draw_x + 20, draw_y - 70) // Smoke Stack
+				break;
+			case obj_temple:
+				draw_sprite(spr_damage_fire, fire_frame, draw_x - 32, draw_y - 16) // Left stairs
+				draw_sprite(spr_damage_fire, fire_frame, draw_x + 32, draw_y - 16) // Right stairs
+				draw_sprite(spr_damage_fire, fire_frame, draw_x - 20, draw_y - 60) // Pillars
+				draw_sprite(spr_damage_fire, fire_frame, draw_x + 16, draw_y - 110) //Upper sanctum
+				draw_sprite(spr_damage_fire, fire_frame, draw_x, draw_y - 140) // Dome Peak
+				break;
+			case obj_player_base:
+				draw_sprite(spr_damage_fire, fire_frame, draw_x - 24, draw_y) // Left side
+				draw_sprite(spr_damage_fire, fire_frame, draw_x + 24, draw_y) // Right base
+				draw_sprite(spr_damage_fire, fire_frame, draw_x, draw_y - 45) // Center balcony
+				draw_sprite(spr_damage_fire, fire_frame, draw_x - 10, draw_y - 90) // Near Attenna
+				break;
+			default: //fallback
+			draw_sprite(spr_damage_fire, fire_frame, draw_x, draw_y)
+			break;
+		}
+		
+		
+		////Stamp Fire sprite on top of building
+		//draw_sprite(spr_damage_fire, fire_frame, draw_x, draw_y);
+	
+		////If it's a wide building
+		//if(sprite_width > 64){
+		//	draw_sprite(spr_damage_fire, fire_frame, draw_x + 32, draw_y);
+		//}
+	}
 	
 	//gentle floating bounce calculation.. will be a sine wave
 	var bob_offset = sin(alert_bob_timer) * 6;

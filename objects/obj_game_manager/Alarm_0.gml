@@ -80,7 +80,7 @@ with (obj_building_parent) {
 			var sector_multiplier = component_get_sector_cash_multiplier(building_district);
 			
 			var dynamic_income = floor(level_income * sector_multiplier);
-			total_building_cash += dynamic_income;
+			//total_building_cash += dynamic_income;
 			
 			
 			//Dynamic housing pool... Will help with Temple curve based on population
@@ -117,7 +117,7 @@ with (obj_building_parent) {
 //Bookie and cash scripts
 
 var financial_multiplier = component_get_financial_multiplier();
-var final_cash_payout = ceil(total_building_cash * financial_multiplier);
+var final_cash_payout = component_calculate_master_payout();
 
 
 
@@ -261,7 +261,7 @@ if (game_over_state == "playing") {
 }
 
 
-if (total_building_cash > 0) {
+if (final_cash_payout > 0) {
 	audio_play_sound(snd_income, 1, false);
 }
 

@@ -13,11 +13,16 @@ function component_calculate_master_payout(){
 	
 	//Accumulate base income per district
 	with (obj_building_parent){
-		if(is_owned_by_player == true && is_player_base == false){
+		if(is_owned_by_player == true && is_player_base == false && building_health >= 30){
 			var sect_mult = component_get_sector_cash_multiplier(building_district);
-			var scaled_income = income_amount * building_level;
+			var base_rate = income_amount;
+			if(object_index == obj_temple){
+				base_rate = component_calculate_temple_tithe();
+			}
 			
-			raw_payout += (scaled_income * sect_mult);
+			var scaled_income = floor((base_rate * building_level) * sect_mult);
+			
+			raw_payout += scaled_income;
 			
 			//Tract ownership per sector
 			switch(building_district) {
@@ -38,5 +43,7 @@ function component_calculate_master_payout(){
 	if(uptown_owned >= 3) synergy_bonus += (uptown_owned - 2) * 0.15;
 	if(capitol_owned >= 3) synergy_bonus += (capitol_owned - 2) * 0.15;
 	
-	return round(raw_payout * synergy_bonus);
+	var financial_multiplier = component_get_financial_multiplier();
+	
+	return ceil((raw_payout * synergy_bonus) * financial_multiplier);
 }
