@@ -1,52 +1,93 @@
+if(keyboard_check_pressed(vk_escape)){
+	if(!instance_exists(obj_pause_menu)){
+	instance_deactivate_all(true);
+	instance_create_layer(0, 0, "Instances", obj_pause_menu);
+	}
+}
+
+
 global.game_tick +=1;
+
+
 
 
 //Start up Instructions!
 if (show_instructions == true) {
 	//If player clicks the mouse, dismiss the guide
-	if(mouse_check_button_pressed(mb_left) || keyboard_check_pressed(vk_space)) { 
+	if(device_mouse_check_button_pressed(0 , mb_left) || keyboard_check_pressed(vk_space)) { 
 			show_instructions = false;
 		}
-		
 		//freeze all background operations so game doesn't start early
 		exit;
 }
 
-if(global.story_active == true){
-	story_director_update();
-	exit;
+
+
+
+//Zoom Logic! Pinch and Mouse Wheel
+if(!variable_instance_exists(id,"cam_zoom")){
+	cam_zoom = 1.0;
+	zoom_target = 1.0;
+	zoom_speed = 0.1;
+	zoom_min = 0.5; //zoomed out
+	zoom_max = 1.5; // zoomed in close
 }
 
+//capture inputs from mouse or pinching
+if(mouse_wheel_up()) zoom_target = clamp(zoom_target - 0.1, zoom_min, zoom_max);
+if(mouse_wheel_down()) zoom_target = clamp(zoom_target + 0.1, zoom_min, zoom_max);
 
-//Mobile Phone touch screen
-if(device_mouse_check_button_pressed(0, mb_left)) {
-	//Store starting position of the drag
+//Smooth movemnt to zoom level
+cam_zoom = lerp(cam_zoom, zoom_target, zoom_speed);
+
+//Rezie camera view dynamically
+
+var new_w = 1366 * cam_zoom;
+var new_h = 768 * cam_zoom;
+camera_set_view_size(view_camera[0], new_w, new_h);
+
+//update max scroll limits
+var max_scroll_x = max(0, room_width - new_w);
+var max_scroll_y = max(0, room_height - new_h);
+
+if(global.story_active == true){
+	story_director_update();
+	
 	global.drag_start_x = window_mouse_get_x();
 	global.drag_start_y = window_mouse_get_y();
 	global.drag_cam_start_x = global.cam_x;
 	global.drag_cam_start_y = global.cam_y;
-}
+	
+} else {
+
+
+	//Mobile Phone touch screen
+	if(device_mouse_check_button_pressed(0, mb_left)) {
+		//Store starting position of the drag
+		global.drag_start_x = window_mouse_get_x();
+		global.drag_start_y = window_mouse_get_y();
+		global.drag_cam_start_x = global.cam_x;
+		global.drag_cam_start_y = global.cam_y;
+	}
 
 //check if they are hoding down and dragging finger
-if(device_mouse_check_button(0, mb_left)){
-	//exit if they are clicking a menu item
-	if(global.story_active == true) return;
+	if(device_mouse_check_button(0, mb_left)){
 	
-	//Calculate where the finger has moved from start
-	var current_touch_x = window_mouse_get_x();
-	var current_touch_y = window_mouse_get_y();
+		//Calculate where the finger has moved from start
+		var current_touch_x = window_mouse_get_x();
+		var current_touch_y = window_mouse_get_y();
 	
-	var distance_dragged_x = current_touch_x - global.drag_start_x;
-	var distance_dragged_y = current_touch_y - global.drag_start_y;
+		var distance_dragged_x = current_touch_x - global.drag_start_x;
+		var distance_dragged_y = current_touch_y - global.drag_start_y;
 	
-	//change camera based on finger direction (for natural feelings)
-	global.cam_x = global.drag_cam_start_x - distance_dragged_x;
-	global.cam_y = global.drag_cam_start_y - distance_dragged_y;
-}
+		//change camera based on finger direction (for natural feelings)
+		global.cam_x = global.drag_cam_start_x - distance_dragged_x;
+		global.cam_y = global.drag_cam_start_y - distance_dragged_y;
+	}
 
 
 // Keyboard Map navigation
-
+if(!instance_exists(obj_pause_menu)){
 //Move speed
 var base_speed = 12;
 var scroll_speed_x = base_speed * 1.8; //for wide frame axis
@@ -63,9 +104,8 @@ if (move_left) global.cam_x -= scroll_speed_x;
 if (move_right) global.cam_x += scroll_speed_x;
 if (move_up) global.cam_y -= scroll_speed_y;
 if (move_down) global.cam_y += scroll_speed_y;
-
-var max_scroll_x = max(0, room_width - 1366);
-var max_scroll_y = max(0, room_height - 768);
+ }
+}
 
 // Get the Screen size
 //var view_w = camera_get_view_width(view_camera);
@@ -178,11 +218,11 @@ if(global.selected_building == noone) {
 						inst.is_owned_by_player= true;
 						
 						//force alarm 0 to check amount of buildings
-						if(instance_exists(obj_game_manager)){
-							with(obj_game_manager){
-								event_perform(ev_alarm, 0);
-							}
-						}
+						//if(instance_exists(obj_game_manager)){
+						//	with(obj_game_manager){
+						//		event_perform(ev_alarm, 0);
+						//	}
+						//}
 						inst.image_blend = inst.owned_building_color;
 						
 						//Building shake

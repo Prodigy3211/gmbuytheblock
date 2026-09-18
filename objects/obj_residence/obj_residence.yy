@@ -31,8 +31,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"sprite_residence",
-    "path":"sprites/sprite_residence/sprite_residence.yy",
+    "name":"spr_residence_base",
+    "path":"sprites/spr_residence_base/spr_residence_base.yy",
   },
   "spriteMaskId":null,
   "visible":true,

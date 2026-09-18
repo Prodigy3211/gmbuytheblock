@@ -42,6 +42,14 @@ function purchase_faction_unit(_unit_key, _building_inst){
 			audio_play_sound(snd_defender, 10 , false);
 		}
 		
+		if(_unit_key == "bookie"){
+			audio_play_sound(snd_upgrade, 10, false);
+		}
+		
+		if(_unit_key == "spy"){
+			audio_play_sound(snd_defender, 10, false);
+		}
+		
 		//floating text confirmation over selected building
 		var txt = instance_create_layer(inst.x, inst.y - 20, "Instances", obj_floating_text);
 		txt.text = "-$" + string(current_cash_cost) + " " + string_upper(_unit_key);
