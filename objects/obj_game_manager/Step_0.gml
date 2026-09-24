@@ -208,7 +208,7 @@ if(global.selected_building == noone) {
 			
 			
 			//Check for clicks
-			if(mouse_check_button_pressed(mb_left)){
+			if(mouse_check_button_pressed(mb_left) &&_select_cooldown == 0){
 				//SCRIPT CALL: Verify wallet authority to make purchase
 				
 			
@@ -248,7 +248,7 @@ if(global.selected_building == noone) {
 		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
 			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
 			
-			if(mouse_check_button_pressed(mb_left)) {
+			if(mouse_check_button_pressed(mb_left) && _select_cooldown == 0) {
 				//Script call for purchase multiplier
 				var local_purchase_price = component_calculate_building_purchase_cost(inst.building_cost, inst.building_district);
 				
@@ -313,7 +313,7 @@ var list_start_y = ui_y1 + 130
 var btn_w = max_panel_w;
 
 
-if(mouse_check_button_pressed(mb_left)) {
+if(mouse_check_button_pressed(mb_left) && _select_cooldown == 0) {
 	for (var i = 0; i < total_actions; i ++){
 		//Find the x coordinate
 		var row_y = list_start_y + (i *  (list_btn_h + list_spacing))
