@@ -144,21 +144,34 @@ if(global.selected_building == noone) {
 	var b_owned = inst.is_owned_by_player;
 	var is_base = inst.is_player_base;
 	
+	//Curent active Camera
+	var cam = view_camera[0];
+	var cam_x = camera_get_view_x(cam);
+	var cam_y = camera_get_view_y(cam);
+	var cam_w = camera_get_view_width(cam);
+	var cam_h = camera_get_view_height(cam);
+	
+	var scr_w = display_get_gui_width();
+	var scr_h = display_get_gui_height();
+	
+	var gui_inst_x = ((inst.x - cam_x) / cam_w) * scr_w;
+	var gui_inst_y = ((inst.y - cam_y) / cam_h) * scr_h;
+	
 	
 	var panel_w = 240;
 	var panel_h = (is_base) ? 245 : 185;
 	
 	
 	//UI Layout
-	
-	var ui_x1 = inst.x - (panel_w / 2);
-	var ui_y1 = inst.y - panel_h - 16;
+	var margin = 20;
+	var ui_x1 = clamp(gui_inst_x - (panel_w / 2), margin, scr_w - panel_w - margin);
+	var ui_y1 = clamp(gui_inst_y - panel_h - 16, margin, scr_h - panel_h - margin);
 	var ui_x2 = ui_x1 + panel_w;// Boundary lines
 	var ui_y2 = ui_y1 + panel_h;
 	
 	//mouse coordinates based on GUI layer
-	//var gui_mouse_x = device_mouse_x_to_gui(0);
-	//var gui_mouse_y = device_mouse_y_to_gui(0);
+	var gui_mouse_x = device_mouse_x_to_gui(0);
+	var gui_mouse_y = device_mouse_y_to_gui(0);
 	
 	//Automated boxes for buttons
 	var btn_h = 24;
@@ -170,12 +183,15 @@ if(global.selected_building == noone) {
 	if(_select_cooldown > 0) _select_cooldown--;
 	
 	//Deselect logic for building paneld
-	if(mouse_check_button_pressed(mb_left)){
-		var _clicked_inside_ui = (mouse_x >= ui_x1 && mouse_x <= ui_x2 && mouse_y >= ui_y1 && mouse_y <= ui_y2);
+	if(mouse_check_button_pressed(mb_left) && _select_cooldown == 0){
+		var _clicked_inside_ui = (gui_mouse_x >= ui_x1 && gui_mouse_x <= ui_x2 && gui_mouse_y >= ui_y1 && gui_mouse_y <= ui_y2);
+		
+		var _clicked_building = (instance_position(mouse_x, mouse_y, all) == inst);
 		
 		//If player clicks on anything outside of the building. Deselect
-		if(!_clicked_inside_ui){
+		if(!_clicked_inside_ui && !_clicked_building){
 			global.selected_building = noone;
+			_select_cooldown = 2;
 			//audio_play_sound(snd_income, 8, false); MAKE A BETTER CLICK SOUND EFFECT
 			exit;
 		}
@@ -187,8 +203,8 @@ if(global.selected_building == noone) {
 	if(is_unlocked == false) {
 		
 		//If sector is locked then player cannot buy/ upgrade / repair
-		if(mouse_x >= ui_x1 + 15 && mouse_x <= ui_x1 + 15 + max_panel_w &&
-		mouse_y >= btn_y && mouse_y <= btn_y + btn_h){
+		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
+		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h){
 			
 			
 			//Check for clicks
@@ -229,8 +245,8 @@ if(global.selected_building == noone) {
 	if(b_owned == false){
 		
 		//Purchase button
-		if(mouse_x >= ui_x1 + 15 && mouse_x <= ui_x1 + 15 + max_panel_w &&
-			mouse_y >= btn_y && mouse_y <= btn_y + btn_h) {
+		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
+			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
 			
 			if(mouse_check_button_pressed(mb_left)) {
 				//Script call for purchase multiplier
