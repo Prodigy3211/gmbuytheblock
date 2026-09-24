@@ -136,27 +136,50 @@ if(global.selected_building == noone) {
 	exit;
 }
 	
-	//UI Layout
-	
-	var ui_x1 = display_get_gui_width() - 320;
-	var ui_y1 = display_get_gui_height() - 220;
-	
-	//mouse coordinates based on GUI layer
-	var gui_mouse_x = device_mouse_x_to_gui(0);
-	var gui_mouse_y = device_mouse_y_to_gui(0);
-	
-	//Automated boxes for buttons
-	var btn_h = 24;
-	var btn_y = ui_y1 + 158;
-	var max_panel_w = 285;
-	
 	
 	//Pointer to selected target variables
 	var inst = global.selected_building;
 	var district_data = variable_struct_get(global.districts, inst.building_district);
 	var is_unlocked = district_data.unlocked;
 	var b_owned = inst.is_owned_by_player;
+	var is_base = inst.is_player_base;
 	
+	
+	var panel_w = 240;
+	var panel_h = (is_base) ? 245 : 185;
+	
+	
+	//UI Layout
+	
+	var ui_x1 = inst.x - (panel_w / 2);
+	var ui_y1 = inst.y - panel_h - 16;
+	var ui_x2 = ui_x1 + panel_w;// Boundary lines
+	var ui_y2 = ui_y1 + panel_h;
+	
+	//mouse coordinates based on GUI layer
+	//var gui_mouse_x = device_mouse_x_to_gui(0);
+	//var gui_mouse_y = device_mouse_y_to_gui(0);
+	
+	//Automated boxes for buttons
+	var btn_h = 24;
+	var btn_y = ui_y1 + 130;
+	var max_panel_w = panel_w - 30; // MAtching layout in DRAW END
+	
+	//Selection cooldown is supposed to help prevent extra deselects
+	if(!variable_instance_exists(id, "_select_cooldown")) _select_cooldown = 2;
+	if(_select_cooldown > 0) _select_cooldown--;
+	
+	//Deselect logic for building paneld
+	if(mouse_check_button_pressed(mb_left)){
+		var _clicked_inside_ui = (mouse_x >= ui_x1 && mouse_x <= ui_x2 && mouse_y >= ui_y1 && mouse_y <= ui_y2);
+		
+		//If player clicks on anything outside of the building. Deselect
+		if(!_clicked_inside_ui){
+			global.selected_building = noone;
+			//audio_play_sound(snd_income, 8, false); MAKE A BETTER CLICK SOUND EFFECT
+			exit;
+		}
+	}
 	
 	
 	//New Unlock Button override
@@ -164,8 +187,8 @@ if(global.selected_building == noone) {
 	if(is_unlocked == false) {
 		
 		//If sector is locked then player cannot buy/ upgrade / repair
-		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
-		gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h){
+		if(mouse_x >= ui_x1 + 15 && mouse_x <= ui_x1 + 15 + max_panel_w &&
+		mouse_y >= btn_y && mouse_y <= btn_y + btn_h){
 			
 			
 			//Check for clicks
@@ -206,8 +229,8 @@ if(global.selected_building == noone) {
 	if(b_owned == false){
 		
 		//Purchase button
-		if(gui_mouse_x >= ui_x1 + 15 && gui_mouse_x <= ui_x1 + 15 + max_panel_w &&
-			gui_mouse_y >= btn_y && gui_mouse_y <= btn_y + btn_h) {
+		if(mouse_x >= ui_x1 + 15 && mouse_x <= ui_x1 + 15 + max_panel_w &&
+			mouse_y >= btn_y && mouse_y <= btn_y + btn_h) {
 			
 			if(mouse_check_button_pressed(mb_left)) {
 				//Script call for purchase multiplier
@@ -268,17 +291,19 @@ if (inst.is_player_base == true) {
 var actions_array = inst.building_actions;
 var total_actions = array_length(actions_array);
 
-var space_per_button =max_panel_w / total_actions;
-var btn_w = space_per_button - 10;
+var list_btn_h = 22;
+var list_spacing = 6;
+var list_start_y = ui_y1 + 130
+var btn_w = max_panel_w;
 
 
 if(mouse_check_button_pressed(mb_left)) {
 	for (var i = 0; i < total_actions; i ++){
 		//Find the x coordinate
-		var btn_x = (ui_x1 + 15) + (i * space_per_button);
+		var row_y = list_start_y + (i *  (list_btn_h + list_spacing))
 	
 		//Run Hitbox checks using inst
-		if(actions_array[i].check_click(btn_x, btn_y, btn_w, btn_h, inst)){
+		if(actions_array[i].check_click(ui_x1 + 15, row_y, btn_w, list_btn_h, inst)){
 			break;
 		}
 	}

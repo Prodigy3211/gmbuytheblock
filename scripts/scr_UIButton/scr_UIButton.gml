@@ -10,8 +10,8 @@ function scr_UIButton(_label, _callback, _cost_getter, _enabled_getter) construc
 	static draw = function(x1, y1, w, h, _inst){
 		var cost = cost_getter(_inst);
 		var enabled = enabled_getter(_inst);
-		var mx = device_mouse_x_to_gui(0);
-		var my = device_mouse_y_to_gui(0);
+		var mx = mouse_x;
+		var my = mouse_y;
 		
 		//Dynamic hovering recognition state
 		var is_hovered = (mx >= x1 && mx <= x1 + w && my >= y1 && my <= y1 +h);
@@ -32,12 +32,12 @@ function scr_UIButton(_label, _callback, _cost_getter, _enabled_getter) construc
 		//draw text labels
 		draw_set_colour(c_white);
 		draw_set_halign(fa_center);
-		draw_text(x1 + (w / 2), y1 + 4, label);
+		draw_text(x1 + 10, y1 + 4, label);
 		
 		//Draw the Sub-Label Price below the buttons
 		if (cost > 0) {
 			draw_set_colour(c_silver);
-			draw_text(x1 + (w / 2), y1 + h + 3, "$" + string(cost));
+			draw_text(x1 + w - 10, y1 + 4, "$" + string(cost));
 		}
 	};
 	
@@ -45,8 +45,8 @@ function scr_UIButton(_label, _callback, _cost_getter, _enabled_getter) construc
 	static check_click = function(x1, y1, w, h, _inst){
 		if(!enabled_getter(_inst)) return false;
 		
-		var mx = device_mouse_x_to_gui(0);
-		var my = device_mouse_y_to_gui(0);
+		var mx = mouse_x;
+		var my = mouse_y;
 		
 		if (mx >= x1 && mx <= x1 + w && my >= y1 && my <= y1 + h) {
 			callback(_inst); // Fire execution instructions
